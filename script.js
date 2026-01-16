@@ -7,7 +7,7 @@ const translations = {
         // Top Bar & Nav
         app_text: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
         btn_download: "Unduh",
-        btn_login: "Masuk / Daftar",
+        btn_login: "\Kontak Kami",
         nav_home: "BERANDA",
         nav_auction: "LELANG JBA",
         nav_howto: "TATA CARA LELANG",
@@ -155,7 +155,7 @@ const translations = {
         // --- GLOBAL (Nav & Footer) ---
         app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
         btn_download: "Unduh",
-        btn_login: "Masuk / Daftar",
+        btn_login: "Kontak Kami",
         nav_home: "BERANDA",
         nav_auction: "LELANG JBA",
         nav_guide: "TATA CARA LELANG",
