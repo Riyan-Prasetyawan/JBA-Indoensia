@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokasi Lelang - JBA Indonesia</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            --primary-blue: #002855;
+            --accent-blue: #0056b3;
+            --accent-red: #E31E2D;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #f4f6f8;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* =========================================
+           2. HEADER & TOP BAR
+           ========================================= */
+        .top-bar { background-color: var(--primary-blue); color: var(--white); padding: 8px 0; font-size: 0.9rem; }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+        .top-bar a { color: #fff; text-decoration: underline; }
+
+        .lang-container { display: flex; align-items: center; gap: 15px; }
+        .lang-select { 
+            background: rgba(255,255,255,0.2); color: #fff; 
+            border: 1px solid rgba(255,255,255,0.5); padding: 4px 8px; 
+            border-radius: 4px; cursor: pointer; outline: none;
+        }
+        .lang-select option { color: #333; }
+
+        .main-header { background-color: var(--white); box-shadow: 0 2px 4px rgba(0,0,0,0.05); padding: 15px 0; position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo h1 { color: var(--accent-red); font-weight: 800; font-size: 2rem; }
+        
+        .nav-menu ul { display: flex; gap: 20px; }
+        .nav-menu a { font-weight: 500; font-size: 0.9rem; color: var(--primary-blue); text-transform: uppercase; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--accent-red); }
+        
+        .btn-outline { border: 1px solid var(--primary-blue); padding: 8px 20px; border-radius: 4px; color: var(--primary-blue); font-weight: 500; }
+        .btn-outline:hover { background: var(--primary-blue); color: var(--white); }
+
+        /* =========================================
+           3. HALAMAN LOKASI STYLE
+           ========================================= */
+        .page-header { background: #fff; padding: 30px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 40px; }
+        .page-header h2 { color: var(--primary-blue); font-size: 2rem; margin-bottom: 10px; }
+        .page-header p { color: #666; max-width: 600px; }
+
+        .region-section { margin-bottom: 50px; }
+        .region-title { font-size: 1.5rem; color: #333; margin-bottom: 20px; padding-left: 15px; border-left: 5px solid var(--accent-red); font-weight: 700; }
+
+        .location-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+
+        .location-card {
+            background: #fff; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s;
+            border: 1px solid #eee; display: flex; flex-direction: column;
+        }
+        .location-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* Style Gambar Peta */
+        .loc-map-container {
+            height: 180px; 
+            background-color: #eef4ff; 
+            overflow: hidden;
+            position: relative;
+        }
+        .loc-map-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Gambar memenuhi area */
+            transition: transform 0.5s ease;
+        }
+        .location-card:hover .loc-map-img {
+            transform: scale(1.1); /* Zoom effect saat hover */
+        }
+        
+        .loc-content { padding: 20px; flex-grow: 1; }
+        .loc-type { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 5px; display: block; }
+        .loc-content h3 { color: var(--primary-blue); margin-bottom: 10px; font-size: 1.2rem; }
+        .loc-details { font-size: 0.9rem; color: #555; margin-bottom: 15px; }
+        .loc-details p { margin-bottom: 8px; display: flex; gap: 10px; }
+        .loc-icon { min-width: 20px; }
+
+        .card-footer { padding: 15px 20px; border-top: 1px solid #f0f0f0; background: #fafafa; }
+        .btn-direction { 
+            display: block; text-align: center; background: #fff; 
+            border: 1px solid var(--primary-blue); color: var(--primary-blue); 
+            padding: 8px; border-radius: 4px; font-weight: 500; 
+        }
+        .btn-direction:hover { background: var(--primary-blue); color: #fff; }
+
+        /* Head Office Card */
+        .head-office-card {
+            background: linear-gradient(to right, var(--primary-blue), #004080); color: white;
+            padding: 30px; border-radius: 10px; margin-bottom: 50px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+        }
+        .ho-info h3 { font-size: 1.5rem; margin-bottom: 10px; color: white; }
+        .ho-info p { opacity: 0.9; }
+        .ho-btn { background: var(--accent-red); color: white; padding: 12px 25px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+
+        /* =========================================
+           4. FOOTER STYLE
+           ========================================= */
+        footer { background: #1a1a1a; color: #bbb; padding: 60px 0 20px; font-size: 0.9rem; margin-top: auto; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        footer h3 { color: var(--white); margin-bottom: 20px; }
+        footer ul li { margin-bottom: 10px; }
+        .footer-bottom { border-top: 1px solid #333; padding-top: 20px; text-align: center; }
+
+        /* =========================================
+           5. FLOATING BUTTONS
+           ========================================= */
+        .floating-container {
+            position: fixed; bottom: 30px; right: 30px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 9999;
+        }
+        .float-btn {
+            width: 55px; height: 55px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;
+            text-decoration: none; cursor: pointer;
+        }
+        .float-btn:hover { transform: scale(1.1); }
+        .wa-btn { background-color: #25D366; } 
+        .top-btn { 
+            background-color: var(--primary-blue); color: white; 
+            opacity: 0; visibility: hidden; transform: translateY(20px); 
+        }
+        .top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .location-grid { grid-template-columns: 1fr; }
+            .head-office-card { flex-direction: column; text-align: center; }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
+            
+            <div class="lang-container">
+                <select id="languageSelector" class="lang-select">
+                    <option value="id">🇮🇩 Indonesia</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="jp">🇯🇵 日本語</option>
+                </select>
+                <a href="#" data-i18n="btn_download">Download</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo"><h1>JBA</h1></div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" class="active" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="page-header">
+            <h2 data-i18n="page_loc_title">Lokasi Jaringan Lelang</h2>
+            <p data-i18n="feat_net_desc">Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.</p>
+        </section>
+
+        <section class="head-office-card">
+            <div class="ho-info">
+                <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
+                <p>📍 Jalan Sosial No 4, Wijaya Kusuma, Grogol Petamburan, Jakarta Barat, Indonesia</p>
+                <p style="margin-top: 5px;">📞 Customer Service: 1500-369</p>
+            </div>
+            <a href="https://www.google.com/maps/search/Jalan+Sosial+No+4,+Wijaya+Kusuma" target="_blank" class="ho-btn" data-i18n="btn_direction">Lihat di Peta</a>
+        </section>
+
+        <section class="region-section">
+            <h3 class="region-title">Jabodetabek</h3>
+            <div class="location-grid">
+                
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Jakarta Tipar">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type" data-i18n="loc_main">CABANG UTAMA</span>
+                        <h3>JBA Jakarta Tipar</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. Tipar Cakung No. 8, Jakarta Utara</p>
+                            <p><span class="loc-icon">🚗</span> <span data-i18n="cat_car">Mobil</span>: Selasa (Tuesday)</p>
+                            <p><span class="loc-icon">🏍️</span> <span data-i18n="cat_bike">Motor</span>: Rabu (Wednesday)</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Jakarta+Tipar" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Jakarta Meruya">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Jakarta Meruya</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. H. Lebar No. 99, Meruya Utara</p>
+                            <p><span class="loc-icon">📅</span> <span data-i18n="sched_title">Jadwal</span>: Cek Kalender</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Jakarta+Meruya" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="region-section">
+            <h3 class="region-title">Jawa Barat & Tengah</h3>
+            <div class="location-grid">
+                
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Bandung">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Bandung</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. Kopo Bihbul No. 28, Bandung</p>
+                            <p><span class="loc-icon">🚗</span> <span data-i18n="cat_car">Mobil</span>: Kamis (Thursday)</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Bandung" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1577086664693-894553052526?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Semarang">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Semarang</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Kawasan Industri Candi, Semarang</p>
+                            <p><span class="loc-icon">🚗</span> <span data-i18n="cat_car">Mobil</span>: Kamis (Thursday)</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Semarang" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1596423736737-299f0b547963?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Surabaya">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Surabaya</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. Raya Juanda, Sidoarjo</p>
+                            <p><span class="loc-icon">📅</span> <span data-i18n="feat_weekly_title">Mingguan</span></p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Surabaya" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="region-section">
+            <h3 class="region-title">Sumatera & Sulawesi</h3>
+            <div class="location-grid">
+                
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1559604886-2710c0067644?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Pekanbaru">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Pekanbaru</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. Soekarno Hatta, Pekanbaru</p>
+                            <p><span class="loc-icon">🏍️</span> <span data-i18n="cat_bike">Motor</span>: Rabu (Wednesday)</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Pekanbaru" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1599573887053-44f0b2f4461e?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Makassar">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">CABANG</span>
+                        <h3>JBA Makassar</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Jl. Tun Abdul Razak, Gowa</p>
+                            <p><span class="loc-icon">🚗</span> <span data-i18n="cat_car">Mobil</span>: Senin (Monday)</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Makassar" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+                <article class="location-card">
+                    <div class="loc-map-container">
+                        <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=600&auto=format&fit=crop" class="loc-map-img" alt="Peta Jambi">
+                    </div>
+                    <div class="loc-content">
+                        <span class="loc-type">HUB</span>
+                        <h3>JBA Jambi</h3>
+                        <div class="loc-details">
+                            <p><span class="loc-icon">📍</span> Lingkar Selatan, Jambi</p>
+                            <p><span class="loc-icon">📅</span> Tentative</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Hub+Jambi" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
+                    <p>Jalan Sosial No 4, Jakarta Barat</p>
+                    <p><strong>CS:</strong> 1500-369</p>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_service">Layanan</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
+                        <li><a href="#" data-i18n="cat_bike">Lelang Motor</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_info">Informasi</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="link_about">Tentang JBA</a></li>
+                        <li><a href="#" data-i18n="nav_loc">Lokasi Lelang</a></li>
+                        <li><a href="#" data-i18n="sched_title">Jadwal Lelang</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_help">Bantuan</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#" data-i18n="link_contact">Hubungi Kami</a></li>
+                        <li><a href="#" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-container">
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn" title="Kembali ke Atas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+        </a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="float-btn wa-btn" title="Chat WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+    </div>
+
+    <script>
+        // 1. KAMUS BAHASA
+        const translations = {
+            id: {
+                // Navigasi
+                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
+                btn_download: "Unduh",
+                nav_home: "BERANDA",
+                nav_auction: "LELANG JBA",
+                nav_guide: "TATA CARA LELANG",
+                nav_loc: "LOKASI LELANG",
+                nav_member: "PROGRAM PELANGGAN",
+                btn_login: "Kontak Kami",
+                
+                // Halaman Lokasi
+                page_loc_title: "Lokasi Jaringan Lelang",
+                feat_net_desc: "Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.",
+                loc_main: "CABANG UTAMA",
+                btn_direction: "Petunjuk Arah",
+                cat_car: "Mobil",
+                cat_bike: "Motor",
+                sched_title: "Jadwal",
+                feat_weekly_title: "Mingguan",
+
+                // Footer
+                foot_ho: "Kantor Pusat JBA Indonesia",
+                foot_service: "Layanan",
+                foot_info: "Informasi",
+                foot_help: "Bantuan",
+                link_about: "Tentang JBA",
+                link_contact: "Hubungi Kami",
+                link_terms: "Syarat dan Ketentuan",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara."
+            },
+            en: {
+                app_promo: "Download JBA App - No.1 Automotive Auction",
+                btn_download: "Download",
+                nav_home: "HOME",
+                nav_auction: "AUCTION LIST",
+                nav_guide: "HOW TO BID",
+                nav_loc: "LOCATIONS",
+                nav_member: "MEMBERSHIP",
+                btn_login: "Login / Register",
+                
+                page_loc_title: "Auction Network Locations",
+                feat_net_desc: "With 15 branches and 24 hubs spread across strategic locations throughout Indonesia.",
+                loc_main: "MAIN BRANCH",
+                btn_direction: "Get Directions",
+                cat_car: "Car",
+                cat_bike: "Motorcycle",
+                sched_title: "Schedule",
+                feat_weekly_title: "Weekly",
+
+                foot_ho: "JBA Indonesia Head Office",
+                foot_service: "Services",
+                foot_info: "Information",
+                foot_help: "Help",
+                link_about: "About JBA",
+                link_contact: "Contact Us",
+                link_terms: "Terms and Conditions",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
+            },
+            jp: {
+                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
+                btn_download: "ダウンロード",
+                nav_home: "ホーム",
+                nav_auction: "オークション一覧",
+                nav_guide: "入札方法",
+                nav_loc: "会場一覧",
+                nav_member: "会員プログラム",
+                btn_login: "ログイン / 登録",
+                
+                page_loc_title: "オークションネットワーク",
+                feat_net_desc: "インドネシア全土の戦略的な場所に15の支店と24のハブを展開しています。",
+                loc_main: "主要支店",
+                btn_direction: "行き方",
+                cat_car: "自動車",
+                cat_bike: "バイク",
+                sched_title: "スケジュール",
+                feat_weekly_title: "毎週",
+
+                foot_ho: "JBAインドネシア 本社",
+                foot_service: "サービス",
+                foot_info: "インフォメーション",
+                foot_help: "ヘルプ",
+                link_about: "JBAについて",
+                link_contact: "お問い合わせ",
+                link_terms: "利用規約",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
+            }
+        };
+
+        // 2. FUNGSI GANTI BAHASA
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            if (lang === 'jp') {
+                document.body.style.fontFamily = "'Noto Sans JP', 'Roboto', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Roboto', sans-serif";
+            }
+        }
+
+        // 3. INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            // Bahasa
+            const langSelector = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            langSelector.value = savedLang;
+            changeLanguage(savedLang);
+            langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
+
+            // Floating Button Scroll Top
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+            scrollTopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>

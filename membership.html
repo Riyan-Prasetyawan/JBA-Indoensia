@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Pelanggan - JBA Indonesia</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* =========================================
+           STYLE KHUSUS HALAMAN MEMBERSHIP
+           ========================================= */
+        
+        :root {
+            --gold: #D4AF37;
+            --platinum: #7f8c8d;
+            --silver: #bdc3c7;
+        }
+
+        /* Hero Banner */
+        .member-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #001f3f 100%);
+            color: white; text-align: center; padding: 80px 0; position: relative; overflow: hidden;
+        }
+        .member-hero h2 { font-size: 2.5rem; margin-bottom: 15px; position: relative; z-index: 2; }
+        .member-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 700px; margin: 0 auto; position: relative; z-index: 2; }
+
+        /* Tiers Grid */
+        .tiers-section { margin-top: -50px; margin-bottom: 60px; position: relative; z-index: 10; }
+        .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        .tier-card {
+            background: white; border-radius: 12px; padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+            border-top: 5px solid transparent; transition: transform 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .tier-card:hover { transform: translateY(-10px); }
+        
+        .tier-card.silver { border-color: var(--silver); }
+        .tier-card.gold { border-color: var(--gold); transform: scale(1.05); z-index: 2; }
+        .tier-card.platinum { border-color: var(--primary-blue); }
+
+        .tier-icon { font-size: 3rem; margin-bottom: 20px; }
+        .tier-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: #333; }
+        .tier-desc { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+        
+        .tier-benefits { list-style: none; margin-bottom: 30px; text-align: left; flex-grow: 1; }
+        .tier-benefits li { margin-bottom: 12px; padding-left: 25px; position: relative; font-size: 0.95rem; color: #555; }
+        .tier-benefits li::before { content: '✔'; position: absolute; left: 0; color: var(--accent-red); font-weight: bold; }
+
+        .btn-tier { display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .btn-tier-outline { border: 2px solid #333; color: #333; background: transparent; }
+        .btn-tier-outline:hover { background: #333; color: white; }
+        .btn-tier-gold { background: var(--gold); color: white; border: none; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4); }
+        .btn-tier-blue { background: var(--primary-blue); color: white; border: none; }
+
+        /* Benefits Section */
+        .benefits-section { padding: 50px 0; background: white; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h2 { color: var(--primary-blue); margin-bottom: 10px; }
+        
+        .benefit-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .benefit-box { text-align: center; padding: 20px; }
+        .b-icon { font-size: 2.5rem; margin-bottom: 15px; color: var(--accent-red); }
+        .benefit-box h4 { margin-bottom: 10px; font-size: 1.2rem; }
+        .benefit-box p { color: #666; font-size: 0.9rem; }
+
+        /* Promo Box */
+        .promo-box {
+            margin: 60px 0; background: #fff0f1; border-radius: 12px; padding: 40px;
+            display: flex; align-items: center; gap: 40px; border: 1px solid #ffcccc;
+        }
+        .promo-text { flex: 1; }
+        .promo-text h3 { color: var(--accent-red); font-size: 1.8rem; margin-bottom: 10px; }
+        .promo-badge {
+            background: var(--accent-red); color: white; font-weight: bold; padding: 20px;
+            border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center;
+            justify-content: center; text-align: center; flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(227, 30, 45, 0.3);
+        }
+
+        /* CSS Dropdown Bahasa (Copy dari Index) */
+        .lang-container { display: flex; align-items: center; gap: 15px; }
+        .lang-select { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        .lang-select option { color: #333; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .tier-card.gold { transform: none; }
+            .promo-box { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
+            <div class="lang-container">
+                <select id="languageSelector" class="lang-select">
+                    <option value="id">🇮🇩 Indonesia</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="jp">🇯🇵 日本語</option>
+                </select>
+                <a href="#" data-i18n="btn_download">Download</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <h1>JBA</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" class="active" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="member-hero">
+            <div class="container">
+                <h2 data-i18n="mem_hero_title">JBA Membership Priority</h2>
+                <p data-i18n="mem_hero_desc">Bergabunglah menjadi anggota prioritas dan nikmati berbagai keuntungan eksklusif, potongan biaya admin, hingga reward poin di setiap transaksi.</p>
+            </div>
+        </section>
+
+        <div class="container tiers-section">
+            <div class="tiers-grid">
+                
+                <div class="tier-card silver">
+                    <div class="tier-icon">🥈</div>
+                    <h3 class="tier-title" data-i18n="tier_silver_title">Silver Member</h3>
+                    <p class="tier-desc" data-i18n="tier_silver_desc">Untuk pemula & pembeli perorangan</p>
+                    <ul class="tier-benefits">
+                        <li data-i18n="list_silver_1">Akses semua jadwal lelang</li>
+                        <li data-i18n="list_silver_2">Support CS Standar</li>
+                        <li data-i18n="list_silver_3">Limit: 2 Unit/Bulan</li>
+                    </ul>
+                    <a href="pendaftaran-member.html?tier=silver" class="btn-tier btn-tier-outline" data-i18n="btn_register_free">Daftar Gratis</a>
+                </div>
+
+                <div class="tier-card gold">
+                    <div class="tier-icon">👑</div>
+                    <h3 class="tier-title" data-i18n="tier_gold_title">Gold Member</h3>
+                    <p class="tier-desc" data-i18n="tier_gold_desc">Paling populer untuk Showroom</p>
+                    <ul class="tier-benefits">
+                        <li><strong data-i18n="list_all_silver">Semua fitur Silver</strong></li>
+                        <li data-i18n="list_gold_1">Diskon Biaya Admin 5%</li>
+                        <li data-i18n="list_gold_2">Poin Reward transaksi</li>
+                        <li data-i18n="list_gold_3">Limit: Tidak Terbatas</li>
+                    </ul>
+                    <a href="pendaftaran-member.html?tier=gold" class="btn-tier btn-tier-gold" data-i18n="btn_upgrade_gold">Upgrade Gold</a>
+                </div>
+
+                <div class="tier-card platinum">
+                    <div class="tier-icon">💎</div>
+                    <h3 class="tier-title" data-i18n="tier_plat_title">Platinum Member</h3>
+                    <p class="tier-desc" data-i18n="tier_plat_desc">Eksklusif untuk Partner Bisnis</p>
+                    <ul class="tier-benefits">
+                        <li><strong data-i18n="list_all_gold">Semua fitur Gold</strong></li>
+                        <li data-i18n="list_plat_1">Diskon Biaya Admin 10%</li>
+                        <li data-i18n="list_plat_2">Prioritas Pelunasan (Flexi)</li>
+                        <li data-i18n="list_plat_3">Dedicated Account Manager</li>
+                    </ul>
+                    <a href="pendaftaran-member.html?tier=platinum" class="btn-tier btn-tier-blue" data-i18n="btn_contact_sales">Hubungi Sales</a>
+                </div>
+
+            </div>
+        </div>
+
+        <section class="benefits-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 data-i18n="ben_main_title">Keuntungan Anggota</h2>
+                    <p data-i18n="ben_main_desc">Lebih dari sekadar lelang, kami memberikan nilai lebih untuk bisnis Anda.</p>
+                </div>
+                
+                <div class="benefit-items">
+                    <div class="benefit-box">
+                        <div class="b-icon">🎁</div>
+                        <h4 data-i18n="ben_reward_title">JBA Point Reward</h4>
+                        <p data-i18n="ben_reward_desc">Kumpulkan poin dari setiap unit yang dimenangkan dan tukarkan dengan voucher belanja.</p>
+                    </div>
+                    <div class="benefit-box">
+                        <div class="b-icon">📊</div>
+                        <h4 data-i18n="ben_market_title">Analisis Harga Pasar</h4>
+                        <p data-i18n="ben_market_desc">Akses eksklusif ke data historis harga terbentuk untuk membantu penentuan harga jual.</p>
+                    </div>
+                    <div class="benefit-box">
+                        <div class="b-icon">🤝</div>
+                        <h4 data-i18n="ben_credit_title">JBA Kredit</h4>
+                        <p data-i18n="ben_credit_desc">Fasilitas pembiayaan khusus member untuk membantu modal kerja pembelian unit.</p>
+                    </div>
+                </div>
+
+                <div class="promo-box">
+                    <div class="promo-badge" data-i18n="promo_badge">BONUS<br>500 Poin</div>
+                    <div class="promo-text">
+                        <h3 data-i18n="promo_title">Daftar Member Hari Ini!</h3>
+                        <p data-i18n="promo_desc">Dapatkan bonus 500 Poin JBA langsung untuk pendaftaran member baru bulan ini.</p>
+                    </div>
+                    <a href="pendaftaran-member.html?tier=gold" class="btn-tier btn-tier-gold" style="background:var(--accent-red); color:white; border:none;" data-i18n="btn_register_now">Daftar Sekarang</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
+                    <p>Jalan Sosial No 4, Jakarta Barat</p>
+                    <p><strong>CS:</strong> 1500-369</p>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_service">Layanan</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
+                        <li><a href="#" data-i18n="cat_bike">Lelang Motor</a></li>
+                        <li><a href="#">JBA Kredit</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_info">Informasi</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="link_about">Tentang JBA</a></li>
+                        <li><a href="#" data-i18n="nav_loc">Lokasi Lelang</a></li>
+                        <li><a href="#" data-i18n="sched_title">Jadwal Lelang</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_help">Bantuan</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#" data-i18n="link_contact">Hubungi Kami</a></li>
+                        <li><a href="#" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // KAMUS TERJEMAHAN
+        const translations = {
+            id: {
+                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
+                btn_download: "Unduh",
+                nav_home: "BERANDA",
+                nav_auction: "LELANG JBA",
+                nav_guide: "TATA CARA LELANG",
+                nav_loc: "LOKASI LELANG",
+                nav_member: "PROGRAM PELANGGAN",
+                btn_login: "Kontak Kami",
+                foot_ho: "Kantor Pusat JBA Indonesia",
+                foot_service: "Layanan",
+                foot_info: "Informasi",
+                foot_help: "Bantuan",
+                link_about: "Tentang JBA",
+                link_contact: "Hubungi Kami",
+                link_terms: "Syarat dan Ketentuan",
+                sched_title: "Jadwal Lelang",
+                cat_car: "Lelang Mobil",
+                cat_bike: "Lelang Motor",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.",
+
+                // Membership Content
+                mem_hero_title: "JBA Membership Priority",
+                mem_hero_desc: "Bergabunglah menjadi anggota prioritas dan nikmati berbagai keuntungan eksklusif, potongan biaya admin, hingga reward poin di setiap transaksi.",
+                
+                tier_silver_title: "Silver Member",
+                tier_silver_desc: "Untuk pemula & pembeli perorangan",
+                list_silver_1: "Akses semua jadwal lelang",
+                list_silver_2: "Support CS Standar",
+                list_silver_3: "Limit: 2 Unit/Bulan",
+                btn_register_free: "Daftar Gratis",
+
+                tier_gold_title: "Gold Member",
+                tier_gold_desc: "Paling populer untuk Showroom",
+                list_all_silver: "Semua fitur Silver",
+                list_gold_1: "Diskon Biaya Admin 5%",
+                list_gold_2: "Poin Reward transaksi",
+                list_gold_3: "Limit: Tidak Terbatas",
+                btn_upgrade_gold: "Upgrade Gold",
+
+                tier_plat_title: "Platinum Member",
+                tier_plat_desc: "Eksklusif untuk Partner Bisnis",
+                list_all_gold: "Semua fitur Gold",
+                list_plat_1: "Diskon Biaya Admin 10%",
+                list_plat_2: "Prioritas Pelunasan (Flexi)",
+                list_plat_3: "Dedicated Account Manager",
+                btn_contact_sales: "Hubungi Sales",
+
+                ben_main_title: "Keuntungan Anggota",
+                ben_main_desc: "Lebih dari sekadar lelang, kami memberikan nilai lebih untuk bisnis Anda.",
+                ben_reward_title: "JBA Point Reward",
+                ben_reward_desc: "Kumpulkan poin dari setiap unit yang dimenangkan dan tukarkan dengan voucher belanja.",
+                ben_market_title: "Analisis Harga Pasar",
+                ben_market_desc: "Akses eksklusif ke data historis harga terbentuk untuk membantu penentuan harga jual.",
+                ben_credit_title: "JBA Kredit",
+                ben_credit_desc: "Fasilitas pembiayaan khusus member untuk membantu modal kerja pembelian unit.",
+
+                promo_badge: "BONUS<br>500 Poin",
+                promo_title: "Daftar Member Hari Ini!",
+                promo_desc: "Dapatkan bonus 500 Poin JBA langsung untuk pendaftaran member baru bulan ini.",
+                btn_register_now: "Daftar Sekarang"
+            },
+            en: {
+                app_promo: "Download JBA App - No.1 Automotive Auction",
+                btn_download: "Download",
+                nav_home: "HOME",
+                nav_auction: "AUCTION LIST",
+                nav_guide: "HOW TO BID",
+                nav_loc: "LOCATIONS",
+                nav_member: "MEMBERSHIP",
+                btn_login: "Login / Register",
+                foot_ho: "JBA Indonesia Head Office",
+                foot_service: "Services",
+                foot_info: "Information",
+                foot_help: "Help",
+                link_about: "About JBA",
+                link_contact: "Contact Us",
+                link_terms: "Terms & Conditions",
+                sched_title: "Auction Schedule",
+                cat_car: "Car Auction",
+                cat_bike: "Motorcycle Auction",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved.",
+
+                mem_hero_title: "JBA Membership Priority",
+                mem_hero_desc: "Join as a priority member and enjoy exclusive benefits, admin fee discounts, and reward points on every transaction.",
+                
+                tier_silver_title: "Silver Member",
+                tier_silver_desc: "For beginners & individual buyers",
+                list_silver_1: "Access all auction schedules",
+                list_silver_2: "Standard CS Support",
+                list_silver_3: "Limit: 2 Units/Month",
+                btn_register_free: "Register Free",
+
+                tier_gold_title: "Gold Member",
+                tier_gold_desc: "Most popular for Showrooms",
+                list_all_silver: "All Silver features",
+                list_gold_1: "5% Admin Fee Discount",
+                list_gold_2: "Transaction Reward Points",
+                list_gold_3: "Limit: Unlimited",
+                btn_upgrade_gold: "Upgrade Gold",
+
+                tier_plat_title: "Platinum Member",
+                tier_plat_desc: "Exclusive for Business Partners",
+                list_all_gold: "All Gold features",
+                list_plat_1: "10% Admin Fee Discount",
+                list_plat_2: "Payment Priority (Flexi)",
+                list_plat_3: "Dedicated Account Manager",
+                btn_contact_sales: "Contact Sales",
+
+                ben_main_title: "Member Benefits",
+                ben_main_desc: "More than just an auction, we provide extra value for your business.",
+                ben_reward_title: "JBA Point Reward",
+                ben_reward_desc: "Collect points from every unit won and redeem for shopping vouchers.",
+                ben_market_title: "Market Price Analysis",
+                ben_market_desc: "Exclusive access to historical price data to help determine resale prices.",
+                ben_credit_title: "JBA Credit",
+                ben_credit_desc: "Special financing facility for members to assist with unit purchase capital.",
+
+                promo_badge: "BONUS<br>500 Pts",
+                promo_title: "Register Today!",
+                promo_desc: "Get an instant 500 JBA Point bonus for new member registration this month.",
+                btn_register_now: "Register Now"
+            },
+            jp: {
+                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
+                btn_download: "ダウンロード",
+                nav_home: "ホーム",
+                nav_auction: "オークション一覧",
+                nav_guide: "入札方法",
+                nav_loc: "会場一覧",
+                nav_member: "会員プログラム",
+                btn_login: "ログイン / 登録",
+                foot_ho: "JBAインドネシア 本社",
+                foot_service: "サービス",
+                foot_info: "インフォメーション",
+                foot_help: "ヘルプ",
+                link_about: "JBAについて",
+                link_contact: "お問い合わせ",
+                link_terms: "利用規約",
+                sched_title: "オークション日程",
+                cat_car: "自動車オークション",
+                cat_bike: "バイクオークション",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved.",
+
+                mem_hero_title: "JBAメンバーシップ・プライオリティ",
+                mem_hero_desc: "優先会員として参加し、限定特典、事務手数料の割引、取引ごとのリワードポイントをお楽しみください。",
+                
+                tier_silver_title: "シルバー会員",
+                tier_silver_desc: "初心者および個人バイヤー向け",
+                list_silver_1: "全オークション日程へのアクセス",
+                list_silver_2: "標準CSサポート",
+                list_silver_3: "制限：月2台まで",
+                btn_register_free: "無料登録",
+
+                tier_gold_title: "ゴールド会員",
+                tier_gold_desc: "ショールーム向けに一番人気",
+                list_all_silver: "シルバー会員の全機能",
+                list_gold_1: "事務手数料 5% 割引",
+                list_gold_2: "取引リワードポイント",
+                list_gold_3: "制限：無制限",
+                btn_upgrade_gold: "ゴールドにアップグレード",
+
+                tier_plat_title: "プラチナ会員",
+                tier_plat_desc: "ビジネスパートナー限定",
+                list_all_gold: "ゴールド会員の全機能",
+                list_plat_1: "事務手数料 10% 割引",
+                list_plat_2: "支払い優先（Flexi）",
+                list_plat_3: "専任アカウントマネージャー",
+                btn_contact_sales: "営業担当へ連絡",
+
+                ben_main_title: "会員特典",
+                ben_main_desc: "単なるオークション以上に、あなたのビジネスに付加価値を提供します。",
+                ben_reward_title: "JBAポイントリワード",
+                ben_reward_desc: "落札したユニットごとにポイントを集め、ショッピングバウチャーと交換できます。",
+                ben_market_title: "市場価格分析",
+                ben_market_desc: "再販価格の決定に役立つ過去の価格データへの独占アクセス。",
+                ben_credit_title: "JBAクレジット",
+                ben_credit_desc: "ユニット購入資金を支援するための会員専用融資施設。",
+
+                promo_badge: "ボーナス<br>500 Pt",
+                promo_title: "今すぐ会員登録！",
+                promo_desc: "今月の新規会員登録で、すぐに使える500 JBAポイントボーナスをゲット。",
+                btn_register_now: "今すぐ登録"
+            }
+        };
+
+        // FUNGSI GANTI BAHASA
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            if (lang === 'jp') {
+                document.body.style.fontFamily = "'Noto Sans JP', 'Roboto', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Roboto', sans-serif";
+            }
+        }
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelector = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            
+            langSelector.value = savedLang;
+            changeLanguage(savedLang);
+
+            langSelector.addEventListener('change', (e) => {
+                changeLanguage(e.target.value);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Member - JBA Indonesia</title>
+    
+    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="[https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap)" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Layout Grid Pendaftaran */
+        .reg-container { 
+            padding: 40px 20px; max-width: 1000px; margin: 0 auto; 
+            display: grid; grid-template-columns: 2fr 1fr; gap: 40px; 
+        }
+        
+        /* Form Box */
+        .reg-box { 
+            background: #fff; padding: 30px; border-radius: 8px; 
+            border: 1px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+        }
+        .reg-box h2 { 
+            margin-bottom: 20px; color: var(--primary-blue); font-size: 1.5rem; 
+            border-bottom: 2px solid #eee; padding-bottom: 10px; 
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        .form-input { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; 
+            border-radius: 5px; font-size: 1rem; 
+        }
+        .form-input:focus { border-color: var(--primary-blue); outline: none; }
+        
+        /* Summary Box */
+        .summary-box { 
+            background: #f9f9f9; padding: 25px; border-radius: 8px; 
+            border: 1px solid #ddd; height: fit-content; position: sticky; top: 100px; 
+        }
+        .summary-title { 
+            font-size: 1.2rem; margin-bottom: 15px; color: var(--primary-blue); 
+            border-bottom: 1px solid #ccc; padding-bottom: 10px; 
+        }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .summary-total { 
+            margin-top: 20px; padding-top: 15px; border-top: 2px dashed #ccc; 
+            display: flex; justify-content: space-between; font-weight: bold; 
+            font-size: 1.2rem; color: var(--accent-red); 
+        }
+        
+        .btn-submit { 
+            width: 100%; padding: 15px; background: var(--accent-red); 
+            color: white; border: none; border-radius: 6px; font-weight: bold; 
+            cursor: pointer; margin-top: 20px; font-size: 1rem; transition: 0.3s; 
+        }
+        .btn-submit:hover { background: #c41220; }
+
+        /* Media Query */
+        @media (max-width: 768px) { 
+            .reg-container { grid-template-columns: 1fr; } 
+            .nav-menu { display: none; }
+        }
+    </style>
+       <div class="floating-container">
+        
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn" title="Kembali ke Atas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+        </a>
+
+        <a href="https://wa.me/6281234567890?text=Halo%20JBA,%20saya%20tertarik%20dengan%20lelang%20mobil" target="_blank" class="float-btn wa-btn" title="Chat WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+    </div>
+
+    <style>
+        /* =========================================
+           FLOATING BUTTONS (WA & SCROLL TOP)
+           ========================================= */
+        .floating-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 9999; /* Pastikan di atas elemen lain */
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Tombol WhatsApp */
+        .wa-btn {
+            background-color: #25D366; /* Warna Hijau WA */
+        }
+        
+        /* Tombol Scroll Top */
+        .top-btn {
+            background-color: var(--primary-blue); /* Warna Biru JBA */
+            color: white;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        /* Class untuk memunculkan tombol top */
+        .top-btn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+
+    <script>
+        // --- SCRIPT FLOATING BUTTONS ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // Ambil elemen tombol Top
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    // 1. Event saat Scroll
+    window.addEventListener('scroll', () => {
+        // Jika scroll lebih dari 300px, munculkan tombol
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    // 2. Event saat Klik tombol Top
+    scrollTopBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Mencegah reload link hash #
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Efek scroll halus
+        });
+    });
+
+    // (Kode logika bahasa Anda yang sebelumnya tetap di sini)
+    // ...
+});
+    </script>
+
+</body>
+</html>

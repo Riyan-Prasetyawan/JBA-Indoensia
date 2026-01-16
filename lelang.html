@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Lelang - JBA Indonesia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* CSS KHUSUS HALAMAN LELANG */
+        .listing-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            padding-top: 30px;
+            padding-bottom: 60px;
+        }
+
+        .page-header {
+            background: #fff;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .page-title {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        /* Sidebar */
+        .sidebar-filter {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .reset-link {
+            font-size: 0.8rem;
+            color: var(--accent-red);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .btn-filter {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-filter:hover {
+            background: #001f3f;
+        }
+
+        /* Grid & Cards */
+        .listing-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .listing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-top {
+            height: 180px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .car-thumb {
+            transform: scale(1.1);
+        }
+
+        .badge-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .bg-live {
+            background-color: var(--accent-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        .bg-upcoming {
+            background-color: var(--accent-blue);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .card-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #555;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .price-tag {
+            margin-top: auto;
+            margin-bottom: 15px;
+        }
+
+        .price-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-red);
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-view {
+            border: 1px solid #ddd;
+            color: #555;
+        }
+
+        .btn-bid {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+        }
+
+        /* Dropdown Bahasa & Floating Copy */
+        .lang-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-select {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .lang-select option {
+            color: #333;
+        }
+
+        .floating-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 9999;
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: 0.3s;
+            background: white;
+        }
+
+        .wa-btn {
+            background-color: #25D366;
+        }
+
+        .top-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .listing-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-filter {
+                position: relative;
+                top: 0;
+                margin-bottom: 20px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
+            <div class="lang-container">
+                <select id="languageSelector" class="lang-select">
+                    <option value="id">🇮🇩 Indonesia</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="jp">🇯🇵 日本語</option>
+                </select>
+                <a href="#" data-i18n="btn_download">Unduh</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <h1>JBA</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" class="active" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="http://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="breadcrumb"><span data-i18n="nav_home">Beranda</span> / <span id="breadType">Kendaraan</span>
+            </div>
+            <h2 class="page-title" data-i18n="page_lelang_title">Jadwal & Daftar Unit Lelang</h2>
+        </div>
+    </section>
+
+    <main class="container listing-container">
+
+        <aside class="sidebar-filter">
+            <div class="filter-header">
+                <h3 data-i18n="filter_title">Filter Pencarian</h3>
+                <span class="reset-link" onclick="resetFilter()" data-i18n="filter_reset">Reset</span>
+            </div>
+
+            <div class="filter-group">
+                <h4 data-i18n="search_title">Tipe Kendaraan</h4>
+                <select id="filterType" class="filter-select">
+                    <option value="">Semua Tipe</option>
+                    <option value="Mobil">Mobil</option>
+                    <option value="Motor">Motor</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4 data-i18n="filter_loc">Lokasi Cabang</h4>
+                <select id="filterLoc" class="filter-select">
+                    <option value="">Semua Lokasi</option>
+                    <option value="Jakarta Tipar">Jakarta Tipar</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Semarang">Semarang</option>
+                    <option value="Pekanbaru">Pekanbaru</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4 data-i18n="opt_brand">Merek</h4>
+                <select id="filterBrand" class="filter-select">
+                    <option value="">Semua Merek</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Daihatsu">Daihatsu</option>
+                    <option value="Mitsubishi">Mitsubishi</option>
+                    <option value="Suzuki">Suzuki</option>
+                    <option value="Yamaha">Yamaha</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h4 data-i18n="opt_model">Model</h4>
+                <input type="text" id="filterModel" class="filter-select" placeholder="Contoh: Avanza">
+            </div>
+
+            <button class="btn-filter" onclick="applyFilter()" data-i18n="btn_apply">Terapkan Filter</button>
+        </aside>
+
+        <section class="listing-content">
+            <div class="listing-toolbar">
+                <p>Menampilkan <strong id="resultCount">0</strong> Unit</p>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span data-i18n="sort_label">Urutkan:</span>
+                    <select class="sort-select" onchange="sortData(this.value)">
+                        <option value="newest" data-i18n="sort_time">Waktu: Terdekat</option>
+                        <option value="price_asc">Harga: Terendah</option>
+                        <option value="price_desc">Harga: Tertinggi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="listing-grid" id="carGrid">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
+                    <p>Jalan Sosial No 4, Jakarta Barat</p>
+                    <p><strong>CS:</strong> 1500-369</p>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_service">Layanan</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_info">Informasi</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="nav_loc">Lokasi Lelang</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 data-i18n="foot_help">Bantuan</h3>
+                    <ul>
+                        <li><a href="#" data-i18n="link_contact">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-container">
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 15l-6-6-6 6" />
+            </svg></a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="float-btn wa-btn"><svg
+                xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff">
+                <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+            </svg></a>
+    </div>
+
+    <script>
+        // 1. DATABASE MOBIL DUMMY (Termasuk Type: Mobil/Motor)
+        const carDatabase = [
+            { id: 1, type: "Mobil", brand: "Toyota", model: "Avanza 1.3 G", year: 2021, trans: "Manual", loc: "Jakarta Tipar", price: 145000000, img: "img/avanza.png", status: "LIVE" },
+            { id: 2, type: "Mobil", brand: "Honda", model: "Brio Satya E", year: 2023, trans: "Automatic", loc: "Jakarta Tipar", price: 160000000, img: "img/brio.png", status: "LIVE" },
+            { id: 3, type: "Mobil", brand: "Daihatsu", model: "Xenia 1.3 R", year: 2019, trans: "Manual", loc: "Bandung", price: 110000000, img: "img/xenia.png", status: "UPCOMING" },
+            { id: 4, type: "Mobil", brand: "Mitsubishi", model: "Xpander Ultimate", year: 2020, trans: "Automatic", loc: "Bandung", price: 195000000, img: "img/xpander.png", status: "UPCOMING" },
+            { id: 5, type: "Mobil", brand: "Toyota", model: "Fortuner VRZ", year: 2022, trans: "Automatic", loc: "Semarang", price: 480000000, img: "img/fortuner.png", status: "LIVE" },
+            { id: 6, type: "Mobil", brand: "Honda", model: "HR-V Prestige", year: 2021, trans: "Automatic", loc: "Pekanbaru", price: 320000000, img: "img/hrv.png", status: "UPCOMING" },
+            // Motor
+            { id: 9, type: "Motor", brand: "Yamaha", model: "NMAX 155", year: 2022, trans: "Automatic", loc: "Jakarta Tipar", price: 28000000, img: "img/nmax.png", status: "LIVE" },
+            { id: 10, type: "Motor", brand: "Honda", model: "Vario 160", year: 2023, trans: "Automatic", loc: "Bandung", price: 24000000, img: "img/vario.png", status: "UPCOMING" }
+        ];
+
+        // 2. RENDER DATA
+        function renderCars(data) {
+            const grid = document.getElementById('carGrid');
+            const count = document.getElementById('resultCount');
+            grid.innerHTML = '';
+            count.innerText = data.length;
+
+            if (data.length === 0) {
+                grid.innerHTML = '<div class="no-results">Tidak ada kendaraan yang sesuai filter.</div>';
+                return;
+            }
+
+            data.forEach(car => {
+                const badgeClass = car.status === 'LIVE' ? 'bg-live' : 'bg-upcoming';
+                const statusText = car.status === 'LIVE' ? 'LIVE' : 'UPCOMING';
+                const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(car.price);
+
+                const html = `
+                    <article class="product-card">
+                        <div class="card-img-top">
+                            <span class="badge-status ${badgeClass}">${statusText}</span>
+                            <img src="${car.img}" alt="${car.model}" class="car-thumb">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-meta">
+                                <span>Lot: ${100 + car.id}</span>
+                                <span>${car.loc}</span>
+                            </div>
+                            <h3 class="card-title">${car.brand} ${car.model} ${car.year}</h3>
+                            <div class="specs-grid">
+                                <div>${car.trans}</div>
+                                <div>${car.type}</div>
+                                <div>Doc: Ada</div>
+                                <div>${car.loc}</div>
+                            </div>
+                            <div class="price-tag">
+                                <small>Harga Dasar</small>
+                                <div class="price-value">${formattedPrice}</div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="detail.html?id=${car.id}" class="btn-sm btn-view">Detail</a>
+                                <a href="detail.html?id=${car.id}" class="btn-sm btn-bid">BID SEKARANG</a>
+                            </div>
+                        </div>
+                    </article>`;
+                grid.innerHTML += html;
+            });
+        }
+
+        // 3. APPLY FILTER
+        function applyFilter() {
+            const type = document.getElementById('filterType').value.toLowerCase();
+            const loc = document.getElementById('filterLoc').value.toLowerCase();
+            const brand = document.getElementById('filterBrand').value.toLowerCase();
+            const model = document.getElementById('filterModel').value.toLowerCase();
+
+            const filtered = carDatabase.filter(car => {
+                const matchType = type === "" || car.type.toLowerCase() === type;
+                const matchLoc = loc === "" || car.loc.toLowerCase().includes(loc);
+                const matchBrand = brand === "" || car.brand.toLowerCase() === brand;
+                const matchModel = model === "" || car.model.toLowerCase().includes(model);
+                return matchType && matchLoc && matchBrand && matchModel;
+            });
+
+            renderCars(filtered);
+        }
+
+        function resetFilter() {
+            document.getElementById('filterType').value = "";
+            document.getElementById('filterLoc').value = "";
+            document.getElementById('filterBrand').value = "";
+            document.getElementById('filterModel').value = "";
+            renderCars(carDatabase);
+        }
+
+        // 4. INIT SCRIPT
+        const translations2 = { id: { app_promo: "Unduh Aplikasi JBA" }, en: { app_promo: "Download JBA App" }, jp: { app_promo: "アプリダウンロード" } }; // Simplified for brevity
+
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                // Gunakan logic dictionary dari script.js utama, ini fallback
+                const key = el.getAttribute('data-i18n');
+                if (window.translations && window.translations[lang][key]) {
+                    el.innerHTML = window.translations[lang][key];
+                }
+            });
+            if (lang === 'jp') document.body.style.fontFamily = "'Noto Sans JP', sans-serif";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // A. Bahasa
+            const langSelect = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            langSelect.value = savedLang;
+            changeLanguage(savedLang);
+            langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+
+            // B. URL Params (Menerima Data dari Home)
+            const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = urlParams.get('type');
+            const locParam = urlParams.get('loc');
+            const brandParam = urlParams.get('brand');
+            const modelParam = urlParams.get('model');
+
+            if (typeParam) document.getElementById('filterType').value = typeParam;
+            if (locParam) document.getElementById('filterLoc').value = locParam;
+            if (brandParam) document.getElementById('filterBrand').value = brandParam;
+            if (modelParam) document.getElementById('filterModel').value = modelParam;
+
+            // Render Awal (Filtered)
+            applyFilter();
+
+            // C. Floating Scroll
+            const topBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) topBtn.classList.add('show'); else topBtn.classList.remove('show');
+            });
+            topBtn.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        });
+    </script>
+    <script>
+        // 1. KAMUS BAHASA
+        const translations = {
+            id: {
+                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
+                btn_download: "Unduh",
+                nav_home: "BERANDA",
+                nav_auction: "LELANG JBA",
+                nav_guide: "TATA CARA LELANG",
+                nav_loc: "LOKASI LELANG",
+                nav_member: "PROGRAM PELANGGAN",
+                btn_login: "Kontak Kami",
+                page_lelang_title: "Jadwal & Daftar Unit Lelang",
+                filter_title: "Filter Pencarian",
+                filter_reset: "Reset",
+                filter_loc: "Lokasi Cabang",
+                filter_year: "Tahun Kendaraan",
+                filter_trans: "Transmisi",
+                btn_apply: "Terapkan Filter",
+                sort_label: "Urutkan:",
+                sort_time: "Waktu: Terdekat",
+                status_live: "LIVE SEKARANG",
+                status_upcoming: "AKAN DATANG",
+                lbl_lot: "Lot",
+                lbl_grade: "Grade",
+                lbl_price: "Harga Dasar",
+                btn_detail: "Detail",
+                btn_bid: "BID SEKARANG",
+                cat_car: "Mobil",
+                cat_bike: "Motor",
+                foot_ho: "Kantor Pusat JBA Indonesia",
+                foot_service: "Layanan",
+                foot_info: "Informasi",
+                foot_help: "Bantuan",
+                link_about: "Tentang JBA",
+                link_contact: "Hubungi Kami",
+                sched_title: "Jadwal Lelang",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara."
+            },
+            en: {
+                app_promo: "Download JBA App - No.1 Automotive Auction",
+                btn_download: "Download",
+                nav_home: "HOME",
+                nav_auction: "AUCTION LIST",
+                nav_guide: "HOW TO BID",
+                nav_loc: "LOCATIONS",
+                nav_member: "MEMBERSHIP",
+                btn_login: "Login / Register",
+                page_lelang_title: "Auction Schedule & Unit List",
+                filter_title: "Search Filters",
+                filter_reset: "Reset",
+                filter_loc: "Branch Location",
+                filter_year: "Vehicle Year",
+                filter_trans: "Transmission",
+                btn_apply: "Apply Filter",
+                sort_label: "Sort By:",
+                sort_time: "Time: Earliest",
+                status_live: "LIVE NOW",
+                status_upcoming: "UPCOMING",
+                lbl_lot: "Lot",
+                lbl_grade: "Grade",
+                lbl_price: "Base Price",
+                btn_detail: "Details",
+                btn_bid: "BID NOW",
+                cat_car: "Car",
+                cat_bike: "Motorcycle",
+                foot_ho: "JBA Indonesia Head Office",
+                foot_service: "Services",
+                foot_info: "Information",
+                foot_help: "Help",
+                link_about: "About JBA",
+                link_contact: "Contact Us",
+                sched_title: "Auction Schedule",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
+            },
+            jp: {
+                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
+                btn_download: "ダウンロード",
+                nav_home: "ホーム",
+                nav_auction: "オークション一覧",
+                nav_guide: "入札方法",
+                nav_loc: "会場一覧",
+                nav_member: "会員プログラム",
+                btn_login: "ログイン / 登録",
+                page_lelang_title: "オークションスケジュールと出品リスト",
+                filter_title: "検索フィルター",
+                filter_reset: "リセット",
+                filter_loc: "支店所在地",
+                filter_year: "年式",
+                filter_trans: "トランスミッション",
+                btn_apply: "フィルターを適用",
+                sort_label: "並び替え:",
+                sort_time: "時間: 早い順",
+                status_live: "開催中",
+                status_upcoming: "近日開催",
+                lbl_lot: "ロット",
+                lbl_grade: "評価点",
+                lbl_price: "最低落札価格",
+                btn_detail: "詳細",
+                btn_bid: "今すぐ入札",
+                cat_car: "自動車",
+                cat_bike: "バイク",
+                foot_ho: "JBAインドネシア 本社",
+                foot_service: "サービス",
+                foot_info: "インフォメーション",
+                foot_help: "ヘルプ",
+                link_about: "JBAについて",
+                link_contact: "お問い合わせ",
+                sched_title: "オークション日程",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
+            }
+        };
+
+        // 2. FUNGSI GANTI BAHASA
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            if (lang === 'jp') {
+                document.body.style.fontFamily = "'Noto Sans JP', 'Roboto', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Roboto', sans-serif";
+            }
+        }
+
+        // 3. EVENT LISTENERS (Load, Scroll, Click)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Bahasa
+            const langSelector = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            langSelector.value = savedLang;
+            changeLanguage(savedLang);
+            langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
+
+            // Setup Floating Buttons
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+            scrollTopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+
+</html>
