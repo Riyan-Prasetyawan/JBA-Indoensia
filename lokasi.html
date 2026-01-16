@@ -81,7 +81,6 @@
         }
         .location-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* Style Gambar Peta */
         .loc-map-container {
             height: 180px; 
             background-color: #eef4ff; 
@@ -91,11 +90,11 @@
         .loc-map-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Gambar memenuhi area */
+            object-fit: cover; 
             transition: transform 0.5s ease;
         }
         .location-card:hover .loc-map-img {
-            transform: scale(1.1); /* Zoom effect saat hover */
+            transform: scale(1.1); 
         }
         
         .loc-content { padding: 20px; flex-grow: 1; }
@@ -153,10 +152,64 @@
         }
         .top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
+        /* =========================================
+           6. RESPONSIVE & MOBILE NAVBAR FIX
+           ========================================= */
+        .hamburger {
+            display: none; /* Hidden on Desktop */
+            font-size: 28px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            margin-left: 15px;
+        }
+
         @media (max-width: 768px) {
             .location-grid { grid-template-columns: 1fr; }
             .head-office-card { flex-direction: column; text-align: center; }
-            .nav-menu { display: none; }
+
+            /* Mobile Navbar Fix */
+            .hamburger { display: block; } /* Show Hamburger */
+            
+            .header-content { position: relative; }
+            
+            .nav-menu {
+                display: none; /* Hide default menu */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                z-index: 9999;
+                padding: 10px 0;
+            }
+
+            .nav-menu.active {
+                display: block; /* Show menu when active */
+                animation: slideDown 0.3s ease-out;
+            }
+
+            .nav-menu ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .nav-menu li a {
+                display: block;
+                padding: 15px 20px;
+                border-bottom: 1px solid #f0f0f0;
+                color: var(--text-dark);
+            }
+            .nav-menu li a:hover {
+                background: var(--bg-light);
+                color: var(--accent-red);
+            }
+            
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
         }
     </style>
 </head>
@@ -179,8 +232,11 @@
 
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo"><h1>JBA</h1></div>
-            <nav class="nav-menu">
+            <div class="logo">
+                <h1>JBA</h1>
+            </div>
+            
+            <nav class="nav-menu" id="navMenu">
                 <ul>
                     <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
                     <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
@@ -189,8 +245,14 @@
                     <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
                 </ul>
             </nav>
-            <div class="header-actions">
-                <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+
+            <div style="display: flex; align-items: center;">
+                <div class="header-actions">
+                    <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+                </div>
+                <div class="hamburger" id="hamburgerBtn">
+                    ☰
+                </div>
             </div>
         </div>
     </header>
@@ -208,7 +270,7 @@
                 <p>📍 Jalan Sosial No 4, Wijaya Kusuma, Grogol Petamburan, Jakarta Barat, Indonesia</p>
                 <p style="margin-top: 5px;">📞 Customer Service: 1500-369</p>
             </div>
-            <a href="https://www.google.com/maps/search/Jalan+Sosial+No+4,+Wijaya+Kusuma" target="_blank" class="ho-btn" data-i18n="btn_direction">Lihat di Peta</a>
+            <a href="https://goo.gl/maps/xyz" target="_blank" class="ho-btn" data-i18n="btn_view_map">Lihat di Peta</a>
         </section>
 
         <section class="region-section">
@@ -229,7 +291,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Jakarta+Tipar" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/1" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -246,7 +308,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Jakarta+Meruya" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/2" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -270,7 +332,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Bandung" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/3" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -287,7 +349,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Semarang" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/4" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -304,7 +366,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Surabaya" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/5" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -328,7 +390,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Pekanbaru" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/6" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -345,7 +407,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Cabang+Makassar" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/7" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -362,7 +424,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="https://www.google.com/maps/search/?api=1&query=JBA+Hub+Jambi" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
+                        <a href="https://goo.gl/maps/8" target="_blank" class="btn-direction" data-i18n="btn_direction">Petunjuk Arah</a>
                     </div>
                 </article>
 
@@ -384,6 +446,7 @@
                     <ul>
                         <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
                         <li><a href="#" data-i18n="cat_bike">Lelang Motor</a></li>
+                        <li><a href="#">JBA Kredit</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -410,19 +473,14 @@
     </footer>
 
     <div class="floating-container">
-        <a href="#" class="float-btn top-btn" id="scrollTopBtn" title="Kembali ke Atas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-        </a>
-        <a href="https://wa.me/6281234567890" target="_blank" class="float-btn wa-btn" title="Chat WhatsApp">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-        </a>
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="float-btn wa-btn"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
     </div>
 
     <script>
         // 1. KAMUS BAHASA
         const translations = {
             id: {
-                // Navigasi
                 app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
                 btn_download: "Unduh",
                 nav_home: "BERANDA",
@@ -431,18 +489,15 @@
                 nav_loc: "LOKASI LELANG",
                 nav_member: "PROGRAM PELANGGAN",
                 btn_login: "Kontak Kami",
-                
-                // Halaman Lokasi
                 page_loc_title: "Lokasi Jaringan Lelang",
                 feat_net_desc: "Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.",
                 loc_main: "CABANG UTAMA",
                 btn_direction: "Petunjuk Arah",
+                btn_view_map: "Lihat di Peta",
                 cat_car: "Mobil",
                 cat_bike: "Motor",
                 sched_title: "Jadwal",
                 feat_weekly_title: "Mingguan",
-
-                // Footer
                 foot_ho: "Kantor Pusat JBA Indonesia",
                 foot_service: "Layanan",
                 foot_info: "Informasi",
@@ -460,17 +515,16 @@
                 nav_guide: "HOW TO BID",
                 nav_loc: "LOCATIONS",
                 nav_member: "MEMBERSHIP",
-                btn_login: "Login / Register",
-                
+                btn_login: "Contact Us",
                 page_loc_title: "Auction Network Locations",
                 feat_net_desc: "With 15 branches and 24 hubs spread across strategic locations throughout Indonesia.",
                 loc_main: "MAIN BRANCH",
                 btn_direction: "Get Directions",
+                btn_view_map: "View on Map",
                 cat_car: "Car",
                 cat_bike: "Motorcycle",
                 sched_title: "Schedule",
                 feat_weekly_title: "Weekly",
-
                 foot_ho: "JBA Indonesia Head Office",
                 foot_service: "Services",
                 foot_info: "Information",
@@ -488,17 +542,16 @@
                 nav_guide: "入札方法",
                 nav_loc: "会場一覧",
                 nav_member: "会員プログラム",
-                btn_login: "ログイン / 登録",
-                
+                btn_login: "お問い合わせ",
                 page_loc_title: "オークションネットワーク",
                 feat_net_desc: "インドネシア全土の戦略的な場所に15の支店と24のハブを展開しています。",
                 loc_main: "主要支店",
                 btn_direction: "行き方",
+                btn_view_map: "地図で見る",
                 cat_car: "自動車",
                 cat_bike: "バイク",
                 sched_title: "スケジュール",
                 feat_weekly_title: "毎週",
-
                 foot_ho: "JBAインドネシア 本社",
                 foot_service: "サービス",
                 foot_info: "インフォメーション",
@@ -529,16 +582,26 @@
             }
         }
 
-        // 3. INIT
+        // 3. INIT LOGIC
         document.addEventListener('DOMContentLoaded', () => {
-            // Bahasa
+            
+            // A. Bahasa
             const langSelector = document.getElementById('languageSelector');
             const savedLang = localStorage.getItem('selectedLang') || 'id';
             langSelector.value = savedLang;
             changeLanguage(savedLang);
             langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
 
-            // Floating Button Scroll Top
+            // B. Mobile Navbar (Hamburger)
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            if(hamburgerBtn && navMenu) {
+                hamburgerBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // C. Floating Scroll Top
             const scrollTopBtn = document.getElementById('scrollTopBtn');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 300) {
