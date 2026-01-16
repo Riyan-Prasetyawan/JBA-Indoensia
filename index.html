@@ -33,6 +33,74 @@
         .lang-select:hover {
             background-color: rgba(255, 255, 255, 0.3);
         }
+
+        /* --- CSS KHUSUS NAVBAR MOBILE (HAMBURGER) --- */
+        .hamburger {
+            display: none; /* Sembunyi di Desktop */
+            font-size: 28px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            margin-left: 15px;
+        }
+
+        /* Responsive Mobile Style */
+        @media (max-width: 768px) {
+            /* 1. Tampilkan Hamburger */
+            .hamburger {
+                display: block;
+            }
+
+            /* 2. Header Content Relative agar Menu Dropdown posisinya pas */
+            .header-content {
+                position: relative;
+            }
+
+            /* 3. Sembunyikan Menu Default & Ubah jadi Dropdown */
+            .nav-menu {
+                display: none; /* Tersembunyi default */
+                position: absolute;
+                top: 100%; /* Muncul tepat di bawah header */
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                z-index: 9999;
+                padding: 20px 0;
+            }
+
+            /* 4. Class Active untuk Memunculkan Menu (via JS) */
+            .nav-menu.active {
+                display: block;
+                animation: slideDown 0.3s ease-out;
+            }
+
+            /* 5. Susunan Menu Vertikal */
+            .nav-menu ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            .nav-menu ul li {
+                width: 100%;
+                text-align: center;
+            }
+            .nav-menu ul li a {
+                display: block;
+                padding: 15px;
+                border-bottom: 1px solid #f0f0f0;
+                color: var(--text-dark);
+            }
+            .nav-menu ul li a:hover {
+                background-color: var(--bg-light);
+                color: var(--accent-red);
+            }
+
+            /* Animasi Dropdown Halus */
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
     </style>
 </head>
 <body>
@@ -48,7 +116,7 @@
                     <option value="jp">🇯🇵 日本語</option>
                 </select>
 
-                <a href="#" data-i18n="btn_download">Unduh</a>
+                <a href="#" data-i18n="btn_download">Download</a>
             </div>
         </div>
     </div>
@@ -58,7 +126,8 @@
             <div class="logo">
                 <h1>JBA</h1>
             </div>
-            <nav class="nav-menu">
+            
+            <nav class="nav-menu" id="navMenu">
                 <ul>
                     <li><a href="index.html" class="active" data-i18n="nav_home">BERANDA</a></li>
                     <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
@@ -67,8 +136,14 @@
                     <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
                 </ul>
             </nav>
-            <div class="header-actions">
-                <a href="http://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+
+            <div style="display: flex; align-items: center;">
+                <div class="header-actions">
+                    <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+                </div>
+                <div class="hamburger" id="hamburgerBtn">
+                    ☰
+                </div>
             </div>
         </div>
     </header>
@@ -87,7 +162,7 @@
             </div>
         </section>
 
-       <section class="search-section">
+        <section class="search-section">
             <div class="container">
                 <div class="search-card">
                     <h3 data-i18n="search_title">Sedang Cari Kendaraan Apa?</h3>
@@ -112,14 +187,16 @@
                             <option value="Daihatsu">Daihatsu</option>
                             <option value="Mitsubishi">Mitsubishi</option>
                             <option value="Suzuki">Suzuki</option>
-                            <option value="Yamaha">Yamaha</option> </select>
+                            <option value="Yamaha">Yamaha</option>
+                        </select>
                         <select id="homeModel">
                             <option value="" data-i18n="opt_model">Pilih Model</option>
                             <option value="Avanza">Avanza</option>
                             <option value="Brio">Brio</option>
                             <option value="Xenia">Xenia</option>
                             <option value="Xpander">Xpander</option>
-                            <option value="NMAX">NMAX</option> </select>
+                            <option value="NMAX">NMAX</option>
+                        </select>
                         <button type="submit" class="btn-search" data-i18n="btn_search">CARI</button>
                     </form>
                 </div>
@@ -130,7 +207,7 @@
             <div class="container">
                 <div class="section-header">
                     <h2 data-i18n="sched_title">Jadwal Lelang Terdekat</h2>
-                    <a href="#" class="view-all" data-i18n="view_all">Lihat Semua</a>
+                    <a href="lelang.html" class="view-all" data-i18n="view_all">Lihat Semua</a>
                 </div>
 
                 <div class="auction-grid">
@@ -150,7 +227,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="lelang.html" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Jakarta" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
@@ -170,7 +247,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="lelang.html" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Semarang" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
@@ -190,7 +267,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="lelang.html" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Bandung" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
@@ -210,7 +287,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="lelang.html" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Pekanbaru" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
                 </div>
@@ -293,15 +370,15 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
-                    <p>Jalan Sosial No 4, Wijaya Kusuma,<br>Grogol Petamburan, Jakarta Barat, Indonesia</p>
+                    <p>Jalan Sosial No 4, Jakarta Barat</p>
                     <p><strong>CS:</strong> 1500-369</p>
                     <p><strong>Email:</strong> cs@jba.co.id</p>
                 </div>
                 <div class="footer-col">
                     <h3 data-i18n="foot_service">Layanan</h3>
                     <ul>
-                        <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
-                        <li><a href="#" data-i18n="cat_bike">Lelang Motor</a></li>
+                        <li><a href="lelang.html?type=Mobil" data-i18n="cat_car">Lelang Mobil</a></li>
+                        <li><a href="lelang.html?type=Motor" data-i18n="cat_bike">Lelang Motor</a></li>
                         <li><a href="#">JBA Kredit</a></li>
                     </ul>
                 </div>
@@ -309,8 +386,8 @@
                     <h3 data-i18n="foot_info">Informasi</h3>
                     <ul>
                         <li><a href="#" data-i18n="link_about">Tentang JBA</a></li>
-                        <li><a href="#" data-i18n="nav_loc">Lokasi Lelang</a></li>
-                        <li><a href="#" data-i18n="sched_title">Jadwal Lelang</a></li>
+                        <li><a href="lokasi.html" data-i18n="nav_loc">Lokasi Lelang</a></li>
+                        <li><a href="lelang.html" data-i18n="sched_title">Jadwal Lelang</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -328,320 +405,22 @@
         </div>
     </footer>
 
-    <div class="floating-container">
-        
-        <a href="#" class="float-btn top-btn" id="scrollTopBtn" title="Kembali ke Atas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-        </a>
-
-        <a href="https://wa.me/6281234567890?text=Halo%20JBA,%20saya%20tertarik%20dengan%20lelang%20mobil" target="_blank" class="float-btn wa-btn" title="Chat WhatsApp">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-        </a>
-    </div>
-
-    <style>
-        /* =========================================
-           FLOATING BUTTONS (WA & SCROLL TOP)
-           ========================================= */
-        .floating-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 9999; /* Pastikan di atas elemen lain */
-        }
-
-        .float-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .float-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Tombol WhatsApp */
-        .wa-btn {
-            background-color: #25D366; /* Warna Hijau WA */
-        }
-        
-        /* Tombol Scroll Top */
-        .top-btn {
-            background-color: var(--primary-blue); /* Warna Biru JBA */
-            color: white;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-        }
-
-        /* Class untuk memunculkan tombol top */
-        .top-btn.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-    </style>
-
+    <script src="script.js"></script>
     <script>
-        // --- SCRIPT FLOATING BUTTONS ---
-
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // Ambil elemen tombol Top
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    // 1. Event saat Scroll
-    window.addEventListener('scroll', () => {
-        // Jika scroll lebih dari 300px, munculkan tombol
-        if (window.scrollY > 300) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    // 2. Event saat Klik tombol Top
-    scrollTopBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // Mencegah reload link hash #
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Efek scroll halus
-        });
-    });
-
-    // (Kode logika bahasa Anda yang sebelumnya tetap di sini)
-    // ...
-});
-    </script>
-
-    <script>
-        // KAMUS TERJEMAHAN
-        const translations = {
-            id: {
-                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
-                btn_download: "Unduh",
-                nav_home: "BERANDA",
-                nav_auction: "LELANG JBA",
-                nav_guide: "TATA CARA LELANG",
-                nav_loc: "LOKASI LELANG",
-                nav_member: "PROGRAM PELANGGAN",
-                btn_login: "Kontak Kami",
-                
-                hero_title: "Ban dan Scrap Juga Bisa Dilelang!",
-                hero_subtitle: "Mau Ikut? Ini Jadwalnya!",
-                hero_date_text: "Sabtu, 17 Januari 2026",
-                btn_cta: "Ikuti Lelangnya",
-                
-                search_title: "Sedang Cari Kendaraan Apa?",
-                cat_car: "Mobil",
-                cat_bike: "Motor",
-                cat_other: "Lainnya",
-                opt_loc: "Pilih Lokasi",
-                opt_brand: "Pilih Merek",
-                opt_model: "Pilih Model",
-                btn_search: "CARI",
-                
-                sched_title: "Jadwal Lelang Terdekat",
-                view_all: "Lihat Semua",
-                btn_view_list: "Lihat Daftar Unit",
-                month_jan: "Jan",
-                
-                why_title: "Kenapa Memilih Lelang JBA",
-                feat_safe_title: "Aman dan Transparan",
-                feat_safe_desc: "Informasi lengkap mengenai unit kendaraan yang dilelang dapat diakses oleh siapa saja. Terdaftar resmi di bawah DJKN.",
-                feat_net_title: "Jaringan Lelang Luas",
-                feat_net_desc: "Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.",
-                feat_weekly_title: "Lelang Setiap Minggu",
-                feat_weekly_desc: "Terdapat lebih dari 70 event lelang setiap bulannya dan dilaksanakan rutin setiap minggu.",
-                feat_var_title: "Unit Lelang Bervariasi",
-                feat_var_desc: "Setiap minggunya, JBA melelangkan ribuan unit kendaraan dari berbagai merek, model, dan tipe.",
-                
-                news_title: "Info JBA & Artikel",
-                art_tag: "ARTIKEL",
-                
-                app_dl_title: "Dapatkan informasi terbaru seputar lelang dalam genggaman Anda",
-                app_dl_subtitle: "Unduh Aplikasi JBA Sekarang",
-                
-                foot_ho: "Kantor Pusat JBA Indonesia",
-                foot_service: "Layanan",
-                foot_info: "Informasi",
-                foot_help: "Bantuan",
-                link_about: "Tentang JBA",
-                link_contact: "Hubungi Kami",
-                link_terms: "Syarat dan Ketentuan",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara."
-            },
-            en: {
-                app_promo: "Download JBA App - No.1 Automotive Auction",
-                btn_download: "Unduh",
-                nav_home: "HOME",
-                nav_auction: "AUCTION LIST",
-                nav_guide: "HOW TO BID",
-                nav_loc: "LOCATIONS",
-                nav_member: "MEMBERSHIP",
-                btn_login: "Login / Register",
-                
-                hero_title: "Tires and Scrap Can Also Be Auctioned!",
-                hero_subtitle: "Want to Join? Here is the Schedule!",
-                hero_date_text: "Saturday, January 17, 2026",
-                btn_cta: "Join Auction",
-                
-                search_title: "What Vehicle Are You Looking For?",
-                cat_car: "Car",
-                cat_bike: "Motorcycle",
-                cat_other: "Others",
-                opt_loc: "Select Location",
-                opt_brand: "Select Brand",
-                opt_model: "Select Model",
-                btn_search: "SEARCH",
-                
-                sched_title: "Upcoming Auctions",
-                view_all: "View All",
-                btn_view_list: "View Unit List",
-                month_jan: "Jan",
-                
-                why_title: "Why Choose JBA Auction",
-                feat_safe_title: "Safe and Transparent",
-                feat_safe_desc: "Complete information about auctioned vehicles is accessible to everyone. Officially registered under DJKN.",
-                feat_net_title: "Wide Auction Network",
-                feat_net_desc: "With 15 branches and 24 hubs spread across strategic locations throughout Indonesia.",
-                feat_weekly_title: "Weekly Auctions",
-                feat_weekly_desc: "More than 70 auction events every month, conducted routinely every week.",
-                feat_var_title: "Varied Auction Units",
-                feat_var_desc: "Every week, JBA auctions thousands of vehicle units from various brands, models, and types.",
-                
-                news_title: "JBA Info & Articles",
-                art_tag: "ARTICLE",
-                
-                app_dl_title: "Get the latest auction information in the palm of your hand",
-                app_dl_subtitle: "Download JBA App Now",
-                
-                foot_ho: "JBA Indonesia Head Office",
-                foot_service: "Services",
-                foot_info: "Information",
-                foot_help: "Help",
-                link_about: "About JBA",
-                link_contact: "Contact Us",
-                link_terms: "Terms and Conditions",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
-            },
-            jp: {
-                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
-                btn_download: "ダウンロード",
-                nav_home: "ホーム",
-                nav_auction: "オークション一覧",
-                nav_guide: "入札方法",
-                nav_loc: "会場一覧",
-                nav_member: "会員プログラム",
-                btn_login: "ログイン / 登録",
-                
-                hero_title: "タイヤやスクラップもオークション可能です！",
-                hero_subtitle: "参加しませんか？スケジュールはこちら！",
-                hero_date_text: "2026年1月17日（土）",
-                btn_cta: "オークションに参加",
-                
-                search_title: "どの車両をお探しですか？",
-                cat_car: "自動車",
-                cat_bike: "バイク",
-                cat_other: "その他",
-                opt_loc: "場所を選択",
-                opt_brand: "ブランドを選択",
-                opt_model: "モデルを選択",
-                btn_search: "検索",
-                
-                sched_title: "今後のオークション",
-                view_all: "すべて見る",
-                btn_view_list: "出品リストを見る",
-                month_jan: "1月",
-                
-                why_title: "JBAオークションが選ばれる理由",
-                feat_safe_title: "安全で透明",
-                feat_safe_desc: "出品車両に関する完全な情報は誰でもアクセス可能です。DJKNの下で正式に登録されています。",
-                feat_net_title: "広範なネットワーク",
-                feat_net_desc: "インドネシア全土の戦略的な場所に15の支店と24のハブを展開しています。",
-                feat_weekly_title: "毎週開催",
-                feat_weekly_desc: "毎月70以上のオークションイベントがあり、毎週定期的に実施されています。",
-                feat_var_title: "多様な出品車両",
-                feat_var_desc: "毎週、JBAは様々なブランド、モデル、タイプの数千台の車両をオークションにかけています。",
-                
-                news_title: "JBA情報 & 記事",
-                art_tag: "記事",
-                
-                app_dl_title: "最新のオークション情報を手のひらに",
-                app_dl_subtitle: "今すぐJBAアプリをダウンロード",
-                
-                foot_ho: "JBAインドネシア 本社",
-                foot_service: "サービス",
-                foot_info: "インフォメーション",
-                foot_help: "ヘルプ",
-                link_about: "JBAについて",
-                link_contact: "お問い合わせ",
-                link_terms: "利用規約",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
-            }
-        };
-
-        // FUNGSI GANTI BAHASA
-        function changeLanguage(lang) {
-            // 1. Simpan preferensi pengguna
-            localStorage.setItem('selectedLang', lang);
-
-            // 2. Ambil semua elemen yang punya atribut 'data-i18n'
-            const elements = document.querySelectorAll('[data-i18n]');
-
-            // 3. Ganti teks elemen tersebut sesuai kamus
-            elements.forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    // Gunakan innerHTML untuk support simbol HTML seperti &copy;
-                    element.innerHTML = translations[lang][key];
-                }
-            });
-
-            // 4. Ubah Font jika bahasa Jepang (agar lebih rapi)
-            if (lang === 'jp') {
-                document.body.style.fontFamily = "'Noto Sans JP', 'Roboto', sans-serif";
-            } else {
-                document.body.style.fontFamily = "'Roboto', sans-serif";
-            }
-        }
-
-        // EVENT LISTENER SAAT HALAMAN DIMUAT
-        document.addEventListener('DOMContentLoaded', () => {
-            const langSelector = document.getElementById('languageSelector');
-            
-            // Cek apakah ada bahasa yang tersimpan sebelumnya, default ke 'id'
-            const savedLang = localStorage.getItem('selectedLang') || 'id';
-            
-            // Set nilai dropdown sesuai bahasa tersimpan
-            langSelector.value = savedLang;
-            
-            // Jalankan fungsi ganti bahasa
-            changeLanguage(savedLang);
-
-            // Event listener jika user mengganti dropdown
-            langSelector.addEventListener('change', (e) => {
-                changeLanguage(e.target.value);
-            });
-        });
-        
-    </script>
-        <script src="script.js"></script>
-    <script>
-        // SCRIPT KHUSUS BERANDA (INTERAKSI SEARCH)
+        // SCRIPT KHUSUS BERANDA (INTERAKSI SEARCH & MOBILE MENU)
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Logic Tabs (Mobil / Motor)
+            // 1. LOGIC MOBILE NAVBAR (HAMBURGER)
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            if(hamburgerBtn && navMenu) {
+                hamburgerBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // 2. Logic Tabs (Mobil / Motor)
             let selectedType = 'Mobil'; // Default
             const tabs = document.querySelectorAll('.tab-btn');
             
@@ -656,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // 2. Logic Tombol Cari
+            // 3. Logic Tombol Cari
             const searchForm = document.getElementById('searchForm');
             searchForm.addEventListener('submit', (e) => {
                 e.preventDefault(); // Mencegah reload
@@ -666,7 +445,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const model = document.getElementById('homeModel').value;
 
                 // Redirect ke halaman lelang dengan parameter
-                // Contoh: lelang.html?type=Mobil&loc=Jakarta&brand=Toyota
                 const params = new URLSearchParams({
                     type: selectedType,
                     loc: loc,
@@ -676,6 +454,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 window.location.href = `lelang.html?${params.toString()}`;
             });
+
+            // 4. Inisialisasi Bahasa Halaman Ini
+            const langSelector = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            if(langSelector) {
+                langSelector.value = savedLang;
+                langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
+            }
+            // Panggil fungsi global dari script.js
+            if(typeof changeLanguage === 'function') {
+                changeLanguage(savedLang);
+            }
         });
     </script>
 
