@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tata Cara Lelang - JBA Indonesia</title>
+    <title>Detail Kendaraan - JBA Indonesia</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,80 +12,45 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* =========================================
-           STYLE KHUSUS HALAMAN TATA CARA
-           ========================================= */
+        /* CSS KHUSUS DETAIL */
+        .detail-container { padding-top: 30px; padding-bottom: 60px; }
+        .detail-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; }
         
-        .page-header { background: #fff; padding: 30px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 40px; }
-        .page-header h2 { color: var(--primary-blue); font-size: 2rem; margin: 0; }
+        /* Gallery */
+        .gallery-main { width: 100%; height: 400px; background: #ddd; border-radius: 8px; overflow: hidden; margin-bottom: 15px; position: relative; }
+        .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-thumbs { display: flex; gap: 10px; overflow-x: auto; }
+        .thumb-item { width: 80px; height: 60px; border-radius: 4px; cursor: pointer; opacity: 0.6; border: 2px solid transparent; }
+        .thumb-item:hover, .thumb-item.active { opacity: 1; border-color: var(--accent-red); }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Info Box */
+        .bid-box { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #eee; position: sticky; top: 100px; }
+        .lot-info { display: flex; justify-content: space-between; margin-bottom: 15px; color: #666; font-size: 0.9rem; }
+        .product-title { font-size: 1.8rem; color: var(--primary-blue); margin-bottom: 20px; line-height: 1.2; }
+        .price-area { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        .current-price { font-size: 2rem; color: var(--accent-red); font-weight: 800; }
+        .btn-bid-submit { width: 100%; padding: 15px; background: var(--accent-red); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         
-        /* Guide Tabs */
-        .guide-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
-        .tab-btn-guide {
-            padding: 12px 30px; border: 2px solid var(--primary-blue); background: #fff;
-            color: var(--primary-blue); font-weight: bold; border-radius: 30px; cursor: pointer; transition: 0.3s;
-        }
-        .tab-btn-guide.active { background: var(--primary-blue); color: #fff; }
+        /* Tabs & Specs */
+        .info-tabs { margin-top: 40px; border-bottom: 1px solid #ddd; display: flex; gap: 30px; }
+        .tab-link { padding: 10px 0; cursor: pointer; color: #666; font-weight: bold; position: relative; }
+        .tab-link.active { color: var(--primary-blue); border-bottom: 3px solid var(--accent-red); }
+        .spec-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .spec-table td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        .spec-label { font-weight: bold; color: #555; width: 40%; }
 
-        /* Steps Container */
-        .steps-container { max-width: 900px; margin: 0 auto 60px; }
-        
-        .step-card {
-            background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: flex-start; gap: 25px;
-            border-left: 5px solid var(--primary-blue); transition: transform 0.3s;
-        }
-        .step-card:hover { transform: translateX(10px); border-left-color: var(--accent-red); }
-
-        .step-number {
-            background: var(--bg-light); color: var(--primary-blue); width: 60px; height: 60px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: 800; flex-shrink: 0; border: 2px solid var(--primary-blue);
-        }
-
-        .step-content h3 { color: var(--primary-blue); margin-bottom: 10px; font-size: 1.3rem; }
-        .step-content p { color: #666; margin-bottom: 0; line-height: 1.6; }
-
-        /* CTA Box */
-        .cta-box { text-align: center; padding: 60px 0; background: #eef4ff; border-radius: 12px; margin-bottom: 60px; }
-        .cta-btn { background: var(--accent-red); color: white; padding: 15px 30px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 20px; }
-
-        /* CSS Dropdown Bahasa */
+        /* Floating & Lang (Copy) */
         .lang-container { display: flex; align-items: center; gap: 15px; }
         .lang-select { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px; cursor: pointer; }
         .lang-select option { color: #333; }
+        .floating-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 9999; }
+        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: 0.3s; background: white; }
+        .wa-btn { background-color: #25D366; }
+        .top-btn { background-color: var(--primary-blue); color: white; opacity: 0; visibility: hidden; }
+        .top-btn.show { opacity: 1; visibility: visible; }
 
-        /* --- CSS KHUSUS NAVBAR MOBILE (HAMBURGER) --- */
-        .hamburger {
-            display: none; /* Sembunyi di Desktop */
-            font-size: 28px;
-            color: var(--primary-blue);
-            cursor: pointer;
-            margin-left: 15px;
-        }
-
-        /* Responsive Mobile Style */
-        @media (max-width: 768px) {
-            .step-card { flex-direction: column; }
-            
-            /* Navbar Logic */
-            .hamburger { display: block; }
-            .header-content { position: relative; }
-            
-            .nav-menu { 
-                display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-                background: white; box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
-                border-top: 1px solid #eee; z-index: 9999; padding: 20px 0; 
-            }
-            .nav-menu.active { display: block; animation: slideDown 0.3s ease-out; }
-            .nav-menu ul { flex-direction: column; gap: 0; }
-            .nav-menu li a { 
-                display: block; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; color: var(--text-dark); 
-            }
-            .nav-menu li a:hover { background-color: var(--bg-light); color: var(--accent-red); }
-            
-            @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        }
+        @media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; } .nav-menu { display: none; } }
     </style>
 </head>
 <body>
@@ -93,7 +58,6 @@
     <div class="top-bar">
         <div class="container">
             <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
-            
             <div class="lang-container">
                 <select id="languageSelector" class="lang-select">
                     <option value="id">🇮🇩 Indonesia</option>
@@ -108,295 +72,205 @@
     <header class="main-header">
         <div class="container header-content">
             <div class="logo"><h1>JBA</h1></div>
-            
-            <nav class="nav-menu" id="navMenu">
+            <nav class="nav-menu">
                 <ul>
                     <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
-                    <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
-                    <li><a href="tata-cara.html" class="active" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lelang.html" class="active" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
                     <li><a href="lokasi.html" data-i18n="nav_loc">LOKASI LELANG</a></li>
                     <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
                 </ul>
             </nav>
-
-            <div style="display: flex; align-items: center;">
-                <div class="header-actions">
-                    <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
-                </div>
-                <div class="hamburger" id="hamburgerBtn">
-                    ☰
-                </div>
-            </div>
+            <div class="header-actions"><a href="#" class="btn-outline" data-i18n="btn_login">Kontak Kami</a></div>
         </div>
     </header>
 
-    <section class="page-header">
-        <div class="container" style="text-align: center;">
-            <h2 data-i18n="page_guide_title">Panduan & Tata Cara Lelang</h2>
-            <p style="margin-top:10px; color:#666;" data-i18n="page_guide_subtitle">Ikuti langkah mudah untuk mendapatkan kendaraan impian Anda.</p>
-        </div>
-    </section>
+    <div class="container" style="padding-top: 20px;">
+        <p style="font-size:0.9rem; color:#666;">
+            <a href="index.html" data-i18n="nav_home">Beranda</a> / 
+            <a href="lelang.html" data-i18n="nav_auction">Lelang</a> / 
+            <span id="breadcrumbName">Detail</span>
+        </p>
+    </div>
 
-    <main class="container">
-        
-        <div class="guide-tabs">
-            <button class="tab-btn-guide active" data-i18n="tab_buyer">Cara Membeli</button>
-            <button class="tab-btn-guide" style="border-color:#ccc; color:#666;" data-i18n="tab_seller">Cara Menjual</button>
-        </div>
-
-        <div class="steps-container">
+    <main class="container detail-container">
+        <div class="detail-grid">
             
-            <div class="step-card">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3 data-i18n="step_1_title">Registrasi & Pembelian NIPL</h3>
-                    <p data-i18n="step_1_desc">Daftarkan diri Anda melalui website atau aplikasi JBA. Anda wajib membeli NIPL (Nomor Induk Peserta Lelang) sebagai uang jaminan (Deposit) sebelum menawar.</p>
+            <div class="detail-left">
+                <div class="gallery-main">
+                    <img id="mainImage" src="" alt="Car Image">
+                    <span id="statusBadge" style="position:absolute; top:15px; left:15px; padding:5px 10px; font-weight:bold; border-radius:4px; color:white;"></span>
+                </div>
+                <div class="gallery-thumbs" id="galleryThumbs"></div>
+
+                <div class="info-tabs">
+                    <div class="tab-link active" data-i18n="tab_spec">Spesifikasi</div>
+                    <div class="tab-link" data-i18n="tab_inspect">Laporan Inspeksi</div>
+                </div>
+
+                <div class="tab-content">
+                    <table class="spec-table">
+                        <tr><td class="spec-label" data-i18n="spec_year">Tahun</td><td id="specYear">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_trans">Transmisi</td><td id="specTrans">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_color">Warna</td><td id="specColor">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_km">Kilometer</td><td id="specKm">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_fuel">Bahan Bakar</td><td id="specFuel">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_doc">Dokumen</td><td id="specDoc">-</td></tr>
+                        <tr><td class="spec-label" data-i18n="spec_loc">Lokasi</td><td id="specLoc">-</td></tr>
+                    </table>
                 </div>
             </div>
 
-            <div class="step-card">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3 data-i18n="step_2_title">Pengecekan Unit (Open House)</h3>
-                    <p data-i18n="step_2_desc">Peserta dipersilakan untuk melihat dan mengecek kondisi fisik kendaraan secara langsung di lokasi lelang pada masa Open House (H-3 Lelang).</p>
+            <div class="detail-right">
+                <div class="bid-box">
+                    <div class="lot-info">
+                        <span style="background:#333; color:white; padding:2px 8px; border-radius:4px;">Lot: <span id="lotNum">-</span></span>
+                        <span style="background:#0056b3; color:white; padding:2px 8px; border-radius:4px;">Grade: <span id="grade">-</span></span>
+                    </div>
+                    
+                    <h1 class="product-title" id="carTitle">Loading...</h1>
+                    
+                    <div class="price-area">
+                        <span style="display:block; margin-bottom:5px; color:#666;" data-i18n="lbl_curr_price">Harga Dasar</span>
+                        <div class="current-price" id="carPrice">Rp -</div>
+                    </div>
+
+                    <button class="btn-bid-submit" onclick="alert('Silakan Login!')" data-i18n="btn_bid_now">BID SEKARANG</button>
+                    <p style="text-align:center; margin-top:15px; color:#0056b3;" id="timer">--:--:--</p>
                 </div>
             </div>
-
-            <div class="step-card">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3 data-i18n="step_3_title">Proses Bidding</h3>
-                    <p data-i18n="step_3_desc">Lakukan penawaran saat lelang berlangsung. Penawaran bisa dilakukan secara langsung di lokasi (Floor) atau melalui Aplikasi (Online).</p>
-                </div>
-            </div>
-
-            <div class="step-card">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3 data-i18n="step_4_title">Pelunasan & Pengambilan</h3>
-                    <p data-i18n="step_4_desc">Jika menang, lunasi total pembayaran dalam 5 hari kerja. Setelah lunas, unit kendaraan dan dokumen dapat langsung dibawa pulang.</p>
-                </div>
-            </div>
-
         </div>
-
-        <div class="cta-box">
-            <h3 style="color:#002855; font-size:1.5rem;" data-i18n="cta_ready_title">Siap Mengikuti Lelang?</h3>
-            <p style="color:#666; margin-top:5px;" data-i18n="cta_ready_desc">Cek jadwal lelang terdekat sekarang juga.</p>
-            <a href="lelang.html" class="cta-btn" data-i18n="btn_check_sched">Lihat Jadwal Lelang</a>
-        </div>
-
     </main>
 
     <footer>
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
-                    <p>Jalan Sosial No 4, Jakarta Barat</p>
-                    <p><strong>CS:</strong> 1500-369</p>
-                </div>
-                <div class="footer-col">
-                    <h3 data-i18n="foot_service">Layanan</h3>
-                    <ul>
-                        <li><a href="#" data-i18n="cat_car">Lelang Mobil</a></li>
-                        <li><a href="#" data-i18n="cat_bike">Lelang Motor</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3 data-i18n="foot_info">Informasi</h3>
-                    <ul>
-                        <li><a href="#" data-i18n="link_about">Tentang JBA</a></li>
-                        <li><a href="#" data-i18n="nav_loc">Lokasi Lelang</a></li>
-                        <li><a href="#" data-i18n="sched_title">Jadwal Lelang</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3 data-i18n="foot_help">Bantuan</h3>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#" data-i18n="link_contact">Hubungi Kami</a></li>
-                        <li><a href="#" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
-            </div>
+            <p style="text-align:center; color:#bbb; padding:20px 0;" data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia.</p>
         </div>
     </footer>
 
+    <div class="floating-container">
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></a>
+        <a href="https://wa.me/6281234567890" class="float-btn wa-btn"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
+    </div>
+
     <script>
-        // KAMUS BAHASA KHUSUS HALAMAN TATA CARA
-        const translations = {
-            id: {
-                // Navigasi & Footer (Standard)
-                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
-                btn_download: "Unduh",
-                nav_home: "BERANDA",
-                nav_auction: "LELANG JBA",
-                nav_guide: "TATA CARA LELANG",
-                nav_loc: "LOKASI LELANG",
-                nav_member: "PROGRAM PELANGGAN",
-                btn_login: "Kontak Kami",
-                foot_ho: "Kantor Pusat JBA Indonesia",
-                foot_service: "Layanan",
-                foot_info: "Informasi",
-                foot_help: "Bantuan",
-                cat_car: "Lelang Mobil",
-                cat_bike: "Lelang Motor",
-                link_about: "Tentang JBA",
-                link_contact: "Hubungi Kami",
-                link_terms: "Syarat dan Ketentuan",
-                sched_title: "Jadwal Lelang",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.",
-
-                // Konten Halaman Tata Cara
-                page_guide_title: "Panduan & Tata Cara Lelang",
-                page_guide_subtitle: "Ikuti langkah mudah untuk mendapatkan kendaraan impian Anda.",
-                tab_buyer: "Cara Membeli",
-                tab_seller: "Cara Menjual",
-                
-                step_1_title: "Registrasi & Pembelian NIPL",
-                step_1_desc: "Daftarkan diri Anda melalui website atau aplikasi JBA. Anda wajib membeli NIPL (Nomor Induk Peserta Lelang) sebagai uang jaminan (Deposit) sebelum menawar.",
-                
-                step_2_title: "Pengecekan Unit (Open House)",
-                step_2_desc: "Peserta dipersilakan untuk melihat dan mengecek kondisi fisik kendaraan secara langsung di lokasi lelang pada masa Open House (H-3 Lelang).",
-                
-                step_3_title: "Proses Bidding",
-                step_3_desc: "Lakukan penawaran saat lelang berlangsung. Penawaran bisa dilakukan secara langsung di lokasi (Floor) atau melalui Aplikasi (Online).",
-                
-                step_4_title: "Pelunasan & Pengambilan",
-                step_4_desc: "Jika menang, lunasi total pembayaran dalam 5 hari kerja. Setelah lunas, unit kendaraan dan dokumen dapat langsung dibawa pulang.",
-                
-                cta_ready_title: "Siap Mengikuti Lelang?",
-                cta_ready_desc: "Cek jadwal lelang terdekat sekarang juga.",
-                btn_check_sched: "Lihat Jadwal Lelang"
+        // 1. DATA MOBIL (DATABASE SEDERHANA)
+        const cars = {
+            1: {
+                name: "Toyota Avanza 1.3 G M/T 2021",
+                price: "Rp 145.000.000",
+                lot: "102", grade: "B",
+                status: "LIVE",
+                img: "https://images.unsplash.com/photo-1626847037657-fd3622613ce3?q=80&w=800&auto=format&fit=crop",
+                specs: { year: "2021", trans: "Manual", color: "Silver", km: "45.000", fuel: "Bensin", doc: "Lengkap", loc: "Jakarta Tipar" }
             },
-            en: {
-                app_promo: "Download JBA App - No.1 Automotive Auction",
-                btn_download: "Download",
-                nav_home: "HOME",
-                nav_auction: "AUCTION LIST",
-                nav_guide: "HOW TO BID",
-                nav_loc: "LOCATIONS",
-                nav_member: "MEMBERSHIP",
-                btn_login: "Login / Register",
-                foot_ho: "JBA Indonesia Head Office",
-                foot_service: "Services",
-                foot_info: "Information",
-                foot_help: "Help",
-                cat_car: "Car Auction",
-                cat_bike: "Motorcycle Auction",
-                link_about: "About JBA",
-                link_contact: "Contact Us",
-                link_terms: "Terms & Conditions",
-                sched_title: "Auction Schedule",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved.",
-
-                page_guide_title: "Auction Guide & Procedures",
-                page_guide_subtitle: "Follow these easy steps to get your dream vehicle.",
-                tab_buyer: "How to Buy",
-                tab_seller: "How to Sell",
-                
-                step_1_title: "Registration & NIPL Purchase",
-                step_1_desc: "Register via JBA website or app. You must purchase a Bidder ID Number (NIPL) as a security deposit before bidding.",
-                
-                step_2_title: "Unit Inspection (Open House)",
-                step_2_desc: "Participants are welcome to inspect the physical condition of vehicles directly at the auction location during the Open House period (3 days before auction).",
-                
-                step_3_title: "Bidding Process",
-                step_3_desc: "Place your bid during the auction. Bidding can be done directly at the location (Floor) or via App (Online).",
-                
-                step_4_title: "Payment & Collection",
-                step_4_desc: "If you win, settle the total payment within 5 working days. Once paid, the vehicle unit and documents can be taken home immediately.",
-                
-                cta_ready_title: "Ready to Join the Auction?",
-                cta_ready_desc: "Check the nearest auction schedule now.",
-                btn_check_sched: "View Auction Schedule"
+            2: {
+                name: "Honda Brio Satya E CVT 2023",
+                price: "Rp 160.000.000",
+                lot: "105", grade: "A",
+                status: "LIVE",
+                img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=800&auto=format&fit=crop",
+                specs: { year: "2023", trans: "Automatic", color: "Kuning", km: "12.000", fuel: "Bensin", doc: "Lengkap", loc: "Jakarta Tipar" }
             },
-            jp: {
-                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
-                btn_download: "ダウンロード",
-                nav_home: "ホーム",
-                nav_auction: "オークション一覧",
-                nav_guide: "入札方法",
-                nav_loc: "会場一覧",
-                nav_member: "会員プログラム",
-                btn_login: "ログイン / 登録",
-                foot_ho: "JBAインドネシア 本社",
-                foot_service: "サービス",
-                foot_info: "インフォメーション",
-                foot_help: "ヘルプ",
-                cat_car: "自動車オークション",
-                cat_bike: "バイクオークション",
-                link_about: "JBAについて",
-                link_contact: "お問い合わせ",
-                link_terms: "利用規約",
-                sched_title: "オークション日程",
-                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved.",
-
-                page_guide_title: "オークションガイドと手順",
-                page_guide_subtitle: "夢の車を手に入れるための簡単なステップに従ってください。",
-                tab_buyer: "購入方法",
-                tab_seller: "出品方法",
-                
-                step_1_title: "登録とNIPLの購入",
-                step_1_desc: "JBAのウェブサイトまたはアプリから登録してください。入札前に保証金として入札者ID番号（NIPL）を購入する必要があります。",
-                
-                step_2_title: "車両検査（オープンハウス）",
-                step_2_desc: "参加者は、オープンハウス期間中（オークションの3日前）にオークション会場で直接車両の物理的状態を確認することができます。",
-                
-                step_3_title: "入札プロセス",
-                step_3_desc: "オークション中に入札を行います。入札は会場で直接（フロア）、またはアプリ（オンライン）で行うことができます。",
-                
-                step_4_title: "支払いと引き取り",
-                step_4_desc: "落札した場合、5営業日以内に全額を支払います。支払いが完了すると、車両と書類をすぐに持ち帰ることができます。",
-                
-                cta_ready_title: "オークションに参加する準備はできましたか？",
-                cta_ready_desc: "今すぐ最寄りのオークションスケジュールを確認してください。",
-                btn_check_sched: "オークション日程を見る"
+            3: {
+                name: "Daihatsu Xenia 1.3 R 2019",
+                price: "Rp 110.000.000",
+                lot: "201", grade: "C",
+                status: "UPCOMING",
+                img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800&auto=format&fit=crop",
+                specs: { year: "2019", trans: "Manual", color: "Putih", km: "89.000", fuel: "Bensin", doc: "Hilang (STNK)", loc: "Bandung" }
+            },
+            4: {
+                name: "Mitsubishi Xpander Ultimate 2020",
+                price: "Rp 195.000.000",
+                lot: "205", grade: "B",
+                status: "UPCOMING",
+                img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=800&auto=format&fit=crop",
+                specs: { year: "2020", trans: "Automatic", color: "Silver", km: "55.000", fuel: "Bensin", doc: "Lengkap", loc: "Bandung" }
             }
         };
 
-        // FUNGSI GANTI BAHASA
-        function changeLanguage(lang) {
-            localStorage.setItem('selectedLang', lang); 
+        // 2. KAMUS BAHASA
+        const translations = {
+            id: {
+                app_promo: "Unduh Aplikasi JBA", btn_download: "Unduh", nav_home: "BERANDA", nav_auction: "LELANG JBA", nav_guide: "TATA CARA", nav_loc: "LOKASI", nav_member: "MEMBER", btn_login: "Masuk", 
+                tab_spec: "Spesifikasi", tab_inspect: "Laporan Inspeksi", spec_year: "Tahun", spec_trans: "Transmisi", spec_color: "Warna", spec_km: "Kilometer", spec_fuel: "Bahan Bakar", spec_doc: "Dokumen", spec_loc: "Lokasi", lbl_curr_price: "Harga Dasar", btn_bid_now: "BID SEKARANG", foot_copy: "© 2026 PT JBA Indonesia."
+            },
+            en: {
+                app_promo: "Download JBA App", btn_download: "Download", nav_home: "HOME", nav_auction: "AUCTION", nav_guide: "GUIDE", nav_loc: "LOCATIONS", nav_member: "MEMBER", btn_login: "Login",
+                tab_spec: "Specifications", tab_inspect: "Inspection Report", spec_year: "Year", spec_trans: "Transmission", spec_color: "Color", spec_km: "Mileage", spec_fuel: "Fuel", spec_doc: "Docs", spec_loc: "Location", lbl_curr_price: "Base Price", btn_bid_now: "BID NOW", foot_copy: "© 2026 PT JBA Indonesia."
+            },
+            jp: {
+                app_promo: "JBAアプリをダウンロード", btn_download: "ダウンロード", nav_home: "ホーム", nav_auction: "オークション", nav_guide: "ガイド", nav_loc: "会場", nav_member: "会員", btn_login: "ログイン",
+                tab_spec: "仕様", tab_inspect: "検査報告書", spec_year: "年式", spec_trans: "トランスミッション", spec_color: "色", spec_km: "走行距離", spec_fuel: "燃料", spec_doc: "書類", spec_loc: "場所", lbl_curr_price: "最低落札価格", btn_bid_now: "今すぐ入札", foot_copy: "© 2026 PT JBA Indonesia."
+            }
+        };
 
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    element.innerHTML = translations[lang][key];
+        // 3. FUNGSI LOAD DATA
+        function loadCarDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const carId = urlParams.get('id') || 1; // Default ke mobil 1 jika tidak ada ID
+            const car = cars[carId];
+
+            if(car) {
+                document.getElementById('carTitle').innerText = car.name;
+                document.getElementById('breadcrumbName').innerText = car.name;
+                document.getElementById('carPrice').innerText = car.price;
+                document.getElementById('lotNum').innerText = car.lot;
+                document.getElementById('grade').innerText = car.grade;
+                document.getElementById('mainImage').src = car.img;
+                
+                // Status Badge
+                const badge = document.getElementById('statusBadge');
+                badge.innerText = car.status === 'LIVE' ? 'LIVE SEKARANG' : 'AKAN DATANG';
+                badge.style.background = car.status === 'LIVE' ? '#E31E2D' : '#0056b3';
+
+                // Specs
+                document.getElementById('specYear').innerText = car.specs.year;
+                document.getElementById('specTrans').innerText = car.specs.trans;
+                document.getElementById('specColor').innerText = car.specs.color;
+                document.getElementById('specKm').innerText = car.specs.km;
+                document.getElementById('specFuel').innerText = car.specs.fuel;
+                document.getElementById('specDoc').innerText = car.specs.doc;
+                document.getElementById('specLoc').innerText = car.specs.loc;
+
+                // Thumbs (Simple Duplicate for Demo)
+                const thumbsContainer = document.getElementById('galleryThumbs');
+                thumbsContainer.innerHTML = '';
+                for(let i=0; i<3; i++) {
+                    thumbsContainer.innerHTML += `<div class="thumb-item" onclick="document.getElementById('mainImage').src='${car.img}'"><img src="${car.img}"></div>`;
                 }
-            });
-
-            if (lang === 'jp') {
-                document.body.style.fontFamily = "'Noto Sans JP', 'Roboto', sans-serif";
-            } else {
-                document.body.style.fontFamily = "'Roboto', sans-serif";
             }
         }
 
-        // INIT
-        document.addEventListener('DOMContentLoaded', () => {
-            // A. Bahasa
-            const langSelector = document.getElementById('languageSelector');
-            const savedLang = localStorage.getItem('selectedLang') || 'id';
-            langSelector.value = savedLang;
-            changeLanguage(savedLang);
-            langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
+        // 4. FUNGSI BAHASA (Simplified)
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+            if(lang === 'jp') document.body.style.fontFamily = "'Noto Sans JP', sans-serif";
+            else document.body.style.fontFamily = "'Roboto', sans-serif";
+        }
 
-            // B. Mobile Navbar Logic (HAMBURGER)
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const navMenu = document.getElementById('navMenu');
-            if(hamburgerBtn && navMenu) {
-                hamburgerBtn.addEventListener('click', () => {
-                    navMenu.classList.toggle('active');
-                });
-            }
+        // 5. INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCarDetails();
+            
+            const langSelect = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            langSelect.value = savedLang;
+            changeLanguage(savedLang);
+            langSelect.addEventListener('change', (e) => changeLanguage(e.target.value));
+
+            // Floating Top Button
+            const topBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if(window.scrollY > 300) topBtn.classList.add('show'); else topBtn.classList.remove('show');
+            });
+            topBtn.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); });
         });
     </script>
-
 </body>
 </html>
