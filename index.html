@@ -11,6 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <style>
+        /* Mengatur font default agar mendukung karakter Jepang dengan baik */
+        body {
+            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+        }
+
         /* CSS Tambahan untuk Dropdown Bahasa */
         .lang-container {
             display: flex;
@@ -28,7 +33,7 @@
             outline: none;
         }
         .lang-select option {
-            color: #333; /* Warna teks option agar terbaca di background putih */
+            color: #333;
         }
         .lang-select:hover {
             background-color: rgba(255, 255, 255, 0.3);
@@ -36,30 +41,21 @@
 
         /* --- CSS KHUSUS NAVBAR MOBILE (HAMBURGER) --- */
         .hamburger {
-            display: none; /* Sembunyi di Desktop */
+            display: none;
             font-size: 28px;
-            color: var(--primary-blue);
+            color: var(--primary-blue, #0056b3); /* Fallback color */
             cursor: pointer;
             margin-left: 15px;
         }
 
         /* Responsive Mobile Style */
         @media (max-width: 768px) {
-            /* 1. Tampilkan Hamburger */
-            .hamburger {
-                display: block;
-            }
-
-            /* 2. Header Content Relative agar Menu Dropdown posisinya pas */
-            .header-content {
-                position: relative;
-            }
-
-            /* 3. Sembunyikan Menu Default & Ubah jadi Dropdown */
+            .hamburger { display: block; }
+            .header-content { position: relative; }
             .nav-menu {
-                display: none; /* Tersembunyi default */
+                display: none;
                 position: absolute;
-                top: 100%; /* Muncul tepat di bawah header */
+                top: 100%;
                 left: 0;
                 width: 100%;
                 background-color: #ffffff;
@@ -68,34 +64,26 @@
                 z-index: 9999;
                 padding: 20px 0;
             }
-
-            /* 4. Class Active untuk Memunculkan Menu (via JS) */
             .nav-menu.active {
                 display: block;
                 animation: slideDown 0.3s ease-out;
             }
-
-            /* 5. Susunan Menu Vertikal */
             .nav-menu ul {
                 flex-direction: column;
                 gap: 0;
+                padding: 0;
+                margin: 0;
             }
-            .nav-menu ul li {
-                width: 100%;
-                text-align: center;
-            }
+            .nav-menu ul li { width: 100%; text-align: center; list-style: none; }
             .nav-menu ul li a {
                 display: block;
                 padding: 15px;
                 border-bottom: 1px solid #f0f0f0;
-                color: var(--text-dark);
+                color: #333;
+                text-decoration: none;
             }
-            .nav-menu ul li a:hover {
-                background-color: var(--bg-light);
-                color: var(--accent-red);
-            }
+            .nav-menu ul li a:hover { background-color: #f9f9f9; }
 
-            /* Animasi Dropdown Halus */
             @keyframes slideDown {
                 from { opacity: 0; transform: translateY(-10px); }
                 to { opacity: 1; transform: translateY(0); }
@@ -105,8 +93,8 @@
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="top-bar" style="background-color: #003366; color: white; padding: 10px 0;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 15px;">
             <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
             
             <div class="lang-container">
@@ -116,30 +104,31 @@
                     <option value="jp">🇯🇵 日本語</option>
                 </select>
 
-                <a href="#" data-i18n="btn_download">Download</a>
+                <a href="#" style="color: white; text-decoration: none;" data-i18n="btn_download">Download</a>
             </div>
         </div>
     </div>
 
-    <header class="main-header">
-        <div class="container header-content">
+    <header class="main-header" style="background: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div class="container header-content" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 15px;">
             <div class="logo">
-                <h1>JBA</h1>
+                <h1 style="margin: 0; color: #003366; font-size: 24px;">JBA</h1>
             </div>
             
             <nav class="nav-menu" id="navMenu">
-                <ul>
-                    <li><a href="index.html" class="active" data-i18n="nav_home">BERANDA</a></li>
-                    <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
-                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
-                    <li><a href="lokasi.html" data-i18n="nav_loc">LOKASI LELANG</a></li>
-                    <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                <ul style="display: flex; gap: 20px; list-style: none; margin: 0;">
+                    <li><a href="index.html" class="active" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                    <li><a href="artikel.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_blog">ARTIKEL</a></li>
                 </ul>
             </nav>
 
             <div style="display: flex; align-items: center;">
                 <div class="header-actions">
-                    <a href="https://wa.me/6285546528201" class="btn-outline" data-i18n="btn_login">Kontak Kami</a>
+                    <a href="https://wa.me/6285546528201" class="btn-outline" style="border: 1px solid #003366; padding: 8px 15px; border-radius: 5px; text-decoration: none; color: #003366;" data-i18n="btn_contact">Kontak Kami</a>
                 </div>
                 <div class="hamburger" id="hamburgerBtn">
                     ☰
@@ -149,172 +138,168 @@
     </header>
 
     <main>
-        <section class="hero">
+        <section class="hero" style="background: #f4f4f4; padding: 60px 0; text-align: center;">
             <div class="hero-overlay"></div>
             <div class="container hero-content">
-                <h2 data-i18n="hero_title">Ban dan Scrap Juga Bisa Dilelang!</h2>
-                <p data-i18n="hero_subtitle">Mau Ikut? Ini Jadwalnya!</p>
-                <div class="hero-date">
+                <h2 style="font-size: 2.5rem; color: #333; margin-bottom: 10px;" data-i18n="hero_title">Ban dan Scrap Juga Bisa Dilelang!</h2>
+                <p style="font-size: 1.2rem; color: #666; margin-bottom: 30px;" data-i18n="hero_subtitle">Mau Ikut? Ini Jadwalnya!</p>
+                <div class="hero-date" style="background: white; display: inline-block; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px;">
                     <h3 data-i18n="hero_date_text">Sabtu, 17 Januari 2026</h3>
                     <p>13:00 - 17:00 WIB</p>
                 </div>
-                <a href="lelang.html" class="btn-primary" data-i18n="btn_cta">Ikuti Lelangnya</a>
+                <br>
+                <a href="lelang.html" class="btn-primary" style="background: #e60000; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;" data-i18n="btn_cta">Ikuti Lelangnya</a>
             </div>
         </section>
 
-        <section class="search-section">
-            <div class="container">
-                <div class="search-card">
-                    <h3 data-i18n="search_title">Sedang Cari Kendaraan Apa?</h3>
-                    <div class="tabs" id="vehicleTabs">
-                        <button class="tab-btn active" data-type="Mobil" data-i18n="cat_car">Mobil</button>
-                        <button class="tab-btn" data-type="Motor" data-i18n="cat_bike">Motor</button>
-                        <button class="tab-btn" data-type="Lainnya" data-i18n="cat_other">Lainnya</button>
+        <section class="search-section" style="margin-top: -30px; padding-bottom: 50px;">
+            <div class="container" style="max-width: 900px; margin: 0 auto;">
+                <div class="search-card" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <h3 style="margin-top: 0;" data-i18n="search_title">Sedang Cari Kendaraan Apa?</h3>
+                    <div class="tabs" id="vehicleTabs" style="margin-bottom: 20px;">
+                        <button class="tab-btn active" style="padding: 10px 20px; margin-right: 5px; cursor: pointer;" data-type="Mobil" data-i18n="cat_car">Mobil</button>
+                        <button class="tab-btn" style="padding: 10px 20px; margin-right: 5px; cursor: pointer;" data-type="Motor" data-i18n="cat_bike">Motor</button>
+                        <button class="tab-btn" style="padding: 10px 20px; cursor: pointer;" data-type="Lainnya" data-i18n="cat_other">Lainnya</button>
                     </div>
                     
-                    <form class="search-form" id="searchForm">
-                        <select id="homeLoc">
+                    <form class="search-form" id="searchForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <select id="homeLoc" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                             <option value="" data-i18n="opt_loc">Pilih Lokasi</option>
                             <option value="Jakarta Tipar">Jakarta Tipar</option>
                             <option value="Bandung">Bandung</option>
                             <option value="Semarang">Semarang</option>
                             <option value="Pekanbaru">Pekanbaru</option>
                         </select>
-                        <select id="homeBrand">
+                        <select id="homeBrand" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                             <option value="" data-i18n="opt_brand">Pilih Merek</option>
                             <option value="Toyota">Toyota</option>
                             <option value="Honda">Honda</option>
                             <option value="Daihatsu">Daihatsu</option>
-                            <option value="Mitsubishi">Mitsubishi</option>
-                            <option value="Suzuki">Suzuki</option>
-                            <option value="Yamaha">Yamaha</option>
                         </select>
-                        <select id="homeModel">
+                        <select id="homeModel" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                             <option value="" data-i18n="opt_model">Pilih Model</option>
                             <option value="Avanza">Avanza</option>
                             <option value="Brio">Brio</option>
                             <option value="Xenia">Xenia</option>
-                            <option value="Xpander">Xpander</option>
-                            <option value="NMAX">NMAX</option>
                         </select>
-                        <button type="submit" class="btn-search" data-i18n="btn_search">CARI</button>
+                        <button type="submit" class="btn-search" style="background: #003366; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;" data-i18n="btn_search">CARI</button>
                     </form>
                 </div>
             </div>
         </section>
 
-        <section class="schedule-section">
-            <div class="container">
-                <div class="section-header">
+        <section class="schedule-section" style="padding: 50px 0; background: #fff;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <h2 data-i18n="sched_title">Jadwal Lelang Terdekat</h2>
-                    <a href="lelang.html" class="view-all" data-i18n="view_all">Lihat Semua</a>
+                    <a href="lelang.html" class="view-all" style="color: #003366; text-decoration: none; font-weight: bold;" data-i18n="view_all">Lihat Semua</a>
                 </div>
 
-                <div class="auction-grid">
-                    <div class="auction-card">
-                        <div class="card-header">
-                            <span class="badge-live">LIVE</span>
+                <div class="auction-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                        <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
+                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
                             <span class="lot-count">341 Lot</span>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="padding: 15px;">
                             <h4>Jakarta Tipar</h4>
                             <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info">
+                            <div class="date-info" style="margin-top: 10px; color: #555;">
                                 <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
                             </div>
-                            <div class="time-info">
+                            <div class="time-info" style="color: #555;">
                                 <span class="icon">⏰</span> 13:00 WIB
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="lelang.html?loc=Jakarta" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                        <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
+                            <a href="#" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                    <div class="auction-card">
-                        <div class="card-header">
-                            <span class="badge-live">LIVE</span>
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                        <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
+                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
                             <span class="lot-count">177 Lot</span>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="padding: 15px;">
                             <h4>Semarang</h4>
                             <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info">
+                            <div class="date-info" style="margin-top: 10px; color: #555;">
                                 <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
                             </div>
-                            <div class="time-info">
+                            <div class="time-info" style="color: #555;">
                                 <span class="icon">⏰</span> 13:00 WIB
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="lelang.html?loc=Semarang" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                        <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
+                            <a href="#" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                    <div class="auction-card">
-                        <div class="card-header">
-                            <span class="badge-upcoming">UPCOMING</span>
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                        <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
+                            <span class="badge-upcoming" style="background: orange; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">UPCOMING</span>
                             <span class="lot-count">326 Lot</span>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="padding: 15px;">
                             <h4>Bandung</h4>
                             <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info">
+                            <div class="date-info" style="margin-top: 10px; color: #555;">
                                 <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
                             </div>
-                            <div class="time-info">
+                            <div class="time-info" style="color: #555;">
                                 <span class="icon">⏰</span> 13:00 WIB
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="lelang.html?loc=Bandung" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                        <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
+                            <a href="#" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                    <div class="auction-card">
-                        <div class="card-header">
-                            <span class="badge-live">LIVE</span>
+                     <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                        <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
+                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
                             <span class="lot-count">300 Lot</span>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="padding: 15px;">
                             <h4>Pekanbaru</h4>
                             <p class="category" data-i18n="cat_bike">Motor</p>
-                            <div class="date-info">
+                            <div class="date-info" style="margin-top: 10px; color: #555;">
                                 <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
                             </div>
-                            <div class="time-info">
+                            <div class="time-info" style="color: #555;">
                                 <span class="icon">⏰</span> 11:00 WIB
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="lelang.html?loc=Pekanbaru" class="btn-block" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                        <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
+                            <a href="#" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="features-section">
-            <div class="container">
-                <h2 data-i18n="why_title">Kenapa Memilih Lelang JBA</h2>
-                <div class="features-grid">
+        <section class="features-section" style="padding: 50px 0; background: #f8f9fa;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <h2 style="margin-bottom: 40px;" data-i18n="why_title">Kenapa Memilih Lelang JBA</h2>
+                <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
                     <div class="feature-item">
-                        <div class="icon-circle">🛡️</div>
+                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🛡️</div>
                         <h3 data-i18n="feat_safe_title">Aman dan Transparan</h3>
                         <p data-i18n="feat_safe_desc">Informasi lengkap mengenai unit kendaraan yang dilelang dapat diakses oleh siapa saja. Terdaftar resmi di bawah DJKN.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle">🌐</div>
+                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🌐</div>
                         <h3 data-i18n="feat_net_title">Jaringan Lelang Luas</h3>
                         <p data-i18n="feat_net_desc">Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle">📅</div>
+                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">📅</div>
                         <h3 data-i18n="feat_weekly_title">Lelang Setiap Minggu</h3>
                         <p data-i18n="feat_weekly_desc">Terdapat lebih dari 70 event lelang setiap bulannya dan dilaksanakan rutin setiap minggu.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle">🚗</div>
+                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🚗</div>
                         <h3 data-i18n="feat_var_title">Unit Lelang Bervariasi</h3>
                         <p data-i18n="feat_var_desc">Setiap minggunya, JBA melelangkan ribuan unit kendaraan dari berbagai merek, model, dan tipe.</p>
                     </div>
@@ -322,95 +307,298 @@
             </div>
         </section>
 
-        <section class="news-section">
-            <div class="container">
+        <section class="news-section" style="padding: 50px 0;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
                 <div class="section-header">
                     <h2 data-i18n="news_title">Info JBA & Artikel</h2>
                 </div>
-                <div class="news-grid">
-                    <article class="news-card">
-                        <div class="news-image placeholder-img"></div>
-                        <div class="news-content">
-                            <span class="news-tag" data-i18n="art_tag">ARTIKEL</span>
-                            <h3>Cara Terbaru Urus BPKB di Tahun 2026 yang Wajib Anda Pahami</h3>
-                            <p>Memasuki tahun 2026, urusan administrasi kendaraan di Indonesia semakin dipermudah melalui transformasi digital...</p>
+                <div class="news-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <article class="news-card" style="border: 1px solid #eee; border-radius: 8px;">
+                        <div class="news-image placeholder-img" style="background: #ddd; height: 180px;"></div>
+                        <div class="news-content" style="padding: 20px;">
+                            <span class="news-tag" style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
+                            <h3 style="margin: 10px 0; font-size: 1.1rem;" data-i18n="news_1_title">Cara Terbaru Urus BPKB di Tahun 2026 yang Wajib Anda Pahami</h3>
+                            <p style="color: #666; font-size: 0.9rem;" data-i18n="news_1_desc">Memasuki tahun 2026, urusan administrasi kendaraan di Indonesia semakin dipermudah melalui transformasi digital...</p>
                         </div>
                     </article>
-                    <article class="news-card">
-                        <div class="news-image placeholder-img"></div>
-                        <div class="news-content">
-                            <span class="news-tag" data-i18n="art_tag">ARTIKEL</span>
-                            <h3>Mobil Ini Diprediksi Laku Keras di 2026, Siapa yang Akan Menguasai?</h3>
-                            <p>Industri mobil di Indonesia saat ini sedang berada di masa yang benar-benar menantang...</p>
+                    <article class="news-card" style="border: 1px solid #eee; border-radius: 8px;">
+                        <div class="news-image placeholder-img" style="background: #ddd; height: 180px;"></div>
+                        <div class="news-content" style="padding: 20px;">
+                            <span class="news-tag" style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
+                            <h3 style="margin: 10px 0; font-size: 1.1rem;" data-i18n="news_2_title">Mobil Ini Diprediksi Laku Keras di 2026, Siapa yang Akan Menguasai?</h3>
+                            <p style="color: #666; font-size: 0.9rem;" data-i18n="news_2_desc">Industri mobil di Indonesia saat ini sedang berada di masa yang benar-benar menantang...</p>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="app-download">
-            <div class="container app-content">
-                <div class="app-text">
+        <section class="app-download" style="background: #003366; color: white; padding: 60px 0;">
+            <div class="container app-content" style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 15px;">
+                <div class="app-text" style="max-width: 50%;">
                     <h2 data-i18n="app_dl_title">Dapatkan informasi terbaru seputar lelang dalam genggaman Anda</h2>
-                    <p data-i18n="app_dl_subtitle">Unduh Aplikasi JBA Sekarang</p>
-                    <div class="store-buttons">
-                        <button class="btn-store">Google Play</button>
-                        <button class="btn-store">App Store</button>
+                    <p data-i18n="app_dl_subtitle" style="margin: 20px 0;">Unduh Aplikasi JBA Sekarang</p>
+                    <div class="store-buttons" style="display: flex; gap: 10px;">
+                        <button class="btn-store" style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">Google Play</button>
+                        <button class="btn-store" style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">App Store</button>
                     </div>
                 </div>
                 <div class="app-image">
-                    <div class="phone-mockup">📱</div>
+                    <div class="phone-mockup" style="font-size: 100px;">📱</div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
+    <footer style="background: #222; color: #fff; padding: 60px 0 20px;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
+            <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
                 <div class="footer-col">
-                    <h3 data-i18n="foot_ho">Kantor Pusat JBA Indonesia</h3>
-                    <p>Jalan Sosial No 4, Jakarta Barat</p>
+                    <h3 data-i18n="foot_ho" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Kantor Pusat JBA Indonesia</h3>
+                    <p data-i18n="foot_addr">Jalan Sosial No 4, Jakarta Barat</p>
                     <p><strong>CS:</strong> 1500-369</p>
                     <p><strong>Email:</strong> cs@jba.co.id</p>
                 </div>
                 <div class="footer-col">
-                    <h3 data-i18n="foot_service">Layanan</h3>
-                    <ul>
-                        <li><a href="lelang.html?type=Mobil" data-i18n="cat_car">Lelang Mobil</a></li>
-                        <li><a href="lelang.html?type=Motor" data-i18n="cat_bike">Lelang Motor</a></li>
-                        <li><a href="#">JBA Kredit</a></li>
+                    <h3 data-i18n="foot_service" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Layanan</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="lelang.html?type=Mobil" style="color: #aaa; text-decoration: none;" data-i18n="cat_car">Lelang Mobil</a></li>
+                        <li><a href="lelang.html?type=Motor" style="color: #aaa; text-decoration: none;" data-i18n="cat_bike">Lelang Motor</a></li>
+                        <li><a href="#" style="color: #aaa; text-decoration: none;">JBA Kredit</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h3 data-i18n="foot_info">Informasi</h3>
-                    <ul>
-                        <li><a href="#" data-i18n="link_about">Tentang JBA</a></li>
-                        <li><a href="lokasi.html" data-i18n="nav_loc">Lokasi Lelang</a></li>
-                        <li><a href="lelang.html" data-i18n="sched_title">Jadwal Lelang</a></li>
+                    <h3 data-i18n="foot_info" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Informasi</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_about">Tentang JBA</a></li>
+                        <li><a href="lokasi.html" style="color: #aaa; text-decoration: none;" data-i18n="nav_loc">Lokasi Lelang</a></li>
+                        <li><a href="lelang.html" style="color: #aaa; text-decoration: none;" data-i18n="sched_title">Jadwal Lelang</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h3 data-i18n="foot_help">Bantuan</h3>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#" data-i18n="link_contact">Hubungi Kami</a></li>
-                        <li><a href="#" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
+                    <h3 data-i18n="foot_help" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Bantuan</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="#" style="color: #aaa; text-decoration: none;">FAQ</a></li>
+                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_contact">Hubungi Kami</a></li>
+                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
+            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #333; padding-top: 20px;">
                 <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script>
-        // SCRIPT KHUSUS BERANDA (INTERAKSI SEARCH & MOBILE MENU)
+        // --- LOGIKA MULTI-BAHASA (INDONESIA, INGGRIS, JEPANG) ---
+        const translations = {
+            id: {
+                app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
+                btn_download: "Download",
+                nav_home: "BERANDA",
+                nav_auction: "LELANG JBA",
+                nav_guide: "TATA CARA LELANG",
+                nav_loc: "LOKASI LELANG",
+                nav_member: "PROGRAM PELANGGAN",
+                nav_blog: "ARTIKEL",
+                btn_contact: "Kontak Kami",
+                hero_title: "Ban dan Scrap Juga Bisa Dilelang!",
+                hero_subtitle: "Mau Ikut? Ini Jadwalnya!",
+                hero_date_text: "Sabtu, 17 Januari 2026",
+                btn_cta: "Ikuti Lelangnya",
+                search_title: "Sedang Cari Kendaraan Apa?",
+                cat_car: "Mobil",
+                cat_bike: "Motor",
+                cat_other: "Lainnya",
+                opt_loc: "Pilih Lokasi",
+                opt_brand: "Pilih Merek",
+                opt_model: "Pilih Model",
+                btn_search: "CARI",
+                sched_title: "Jadwal Lelang Terdekat",
+                view_all: "Lihat Semua",
+                btn_view_list: "Lihat Daftar Unit",
+                month_jan: "Jan",
+                why_title: "Kenapa Memilih Lelang JBA",
+                feat_safe_title: "Aman dan Transparan",
+                feat_safe_desc: "Informasi lengkap mengenai unit kendaraan yang dilelang dapat diakses oleh siapa saja. Terdaftar resmi di bawah DJKN.",
+                feat_net_title: "Jaringan Lelang Luas",
+                feat_net_desc: "Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.",
+                feat_weekly_title: "Lelang Setiap Minggu",
+                feat_weekly_desc: "Terdapat lebih dari 70 event lelang setiap bulannya dan dilaksanakan rutin setiap minggu.",
+                feat_var_title: "Unit Lelang Bervariasi",
+                feat_var_desc: "Setiap minggunya, JBA melelangkan ribuan unit kendaraan dari berbagai merek, model, dan tipe.",
+                news_title: "Info JBA & Artikel",
+                art_tag: "ARTIKEL",
+                news_1_title: "Cara Terbaru Urus BPKB di Tahun 2026 yang Wajib Anda Pahami",
+                news_1_desc: "Memasuki tahun 2026, urusan administrasi kendaraan di Indonesia semakin dipermudah melalui transformasi digital...",
+                news_2_title: "Mobil Ini Diprediksi Laku Keras di 2026, Siapa yang Akan Menguasai?",
+                news_2_desc: "Industri mobil di Indonesia saat ini sedang berada di masa yang benar-benar menantang...",
+                app_dl_title: "Dapatkan informasi terbaru seputar lelang dalam genggaman Anda",
+                app_dl_subtitle: "Unduh Aplikasi JBA Sekarang",
+                foot_ho: "Kantor Pusat JBA Indonesia",
+                foot_addr: "Jalan Sosial No 4, Jakarta Barat",
+                foot_service: "Layanan",
+                foot_info: "Informasi",
+                foot_help: "Bantuan",
+                link_about: "Tentang JBA",
+                link_contact: "Hubungi Kami",
+                link_terms: "Syarat dan Ketentuan",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara."
+            },
+            en: {
+                app_promo: "Download JBA App - No.1 Automotive Auction",
+                btn_download: "Download",
+                nav_home: "HOME",
+                nav_auction: "JBA AUCTION",
+                nav_guide: "AUCTION GUIDE",
+                nav_loc: "AUCTION LOCATIONS",
+                nav_member: "MEMBERSHIP",
+                nav_blog: "ARTICLES",
+                btn_contact: "Contact Us",
+                hero_title: "Tires and Scrap Can Be Auctioned Too!",
+                hero_subtitle: "Want to Join? Here is the Schedule!",
+                hero_date_text: "Saturday, January 17, 2026",
+                btn_cta: "Join the Auction",
+                search_title: "What Vehicle Are You Looking For?",
+                cat_car: "Car",
+                cat_bike: "Motorcycle",
+                cat_other: "Others",
+                opt_loc: "Select Location",
+                opt_brand: "Select Brand",
+                opt_model: "Select Model",
+                btn_search: "SEARCH",
+                sched_title: "Upcoming Auction Schedule",
+                view_all: "View All",
+                btn_view_list: "View Unit List",
+                month_jan: "Jan",
+                why_title: "Why Choose JBA Auction",
+                feat_safe_title: "Safe and Transparent",
+                feat_safe_desc: "Complete information about auctioned vehicle units is accessible to everyone. Officially registered under DJKN.",
+                feat_net_title: "Extensive Auction Network",
+                feat_net_desc: "With 15 branches and 24 hubs spread across strategic locations throughout Indonesia.",
+                feat_weekly_title: "Weekly Auctions",
+                feat_weekly_desc: "There are more than 70 auction events every month, conducted routinely every week.",
+                feat_var_title: "Varied Auction Units",
+                feat_var_desc: "Every week, JBA auctions thousands of vehicle units of various brands, models, and types.",
+                news_title: "JBA Info & Articles",
+                art_tag: "ARTICLE",
+                news_1_title: "Newest Way to Handle BPKB in 2026 You Must Understand",
+                news_1_desc: "Entering 2026, vehicle administration in Indonesia is made easier through digital transformation...",
+                news_2_title: "This Car is Predicted to Sell Well in 2026, Who Will Dominate?",
+                news_2_desc: "The car industry in Indonesia is currently in a truly challenging time...",
+                app_dl_title: "Get the latest auction information in the palm of your hand",
+                app_dl_subtitle: "Download JBA App Now",
+                foot_ho: "JBA Indonesia Head Office",
+                foot_addr: "Jalan Sosial No 4, West Jakarta",
+                foot_service: "Services",
+                foot_info: "Information",
+                foot_help: "Help",
+                link_about: "About JBA",
+                link_contact: "Contact Us",
+                link_terms: "Terms and Conditions",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. All Rights Reserved."
+            },
+            jp: {
+                app_promo: "JBAアプリをダウンロード - No.1 自動車オークション",
+                btn_download: "ダウンロード",
+                nav_home: "ホーム",
+                nav_auction: "JBAオークション",
+                nav_guide: "オークションガイド",
+                nav_loc: "オークション会場",
+                nav_member: "会員プログラム",
+                nav_blog: "記事",
+                btn_contact: "お問い合わせ",
+                hero_title: "タイヤやスクラップもオークション可能！",
+                hero_subtitle: "参加しますか？スケジュールはこちら！",
+                hero_date_text: "2026年1月17日（土）",
+                btn_cta: "オークションに参加",
+                search_title: "お探しの車両は何ですか？",
+                cat_car: "自動車",
+                cat_bike: "バイク",
+                cat_other: "その他",
+                opt_loc: "場所を選択",
+                opt_brand: "ブランドを選択",
+                opt_model: "モデルを選択",
+                btn_search: "検索",
+                sched_title: "今後のオークション日程",
+                view_all: "すべて見る",
+                btn_view_list: "出品リストを見る",
+                month_jan: "1月",
+                why_title: "JBAオークションが選ばれる理由",
+                feat_safe_title: "安全かつ透明",
+                feat_safe_desc: "出品車両に関する完全な情報は誰でもアクセス可能です。DJKN（国庫総局）に正式登録されています。",
+                feat_net_title: "広範なオークションネットワーク",
+                feat_net_desc: "インドネシア全土の戦略的な場所に15の支店と24のハブを展開しています。",
+                feat_weekly_title: "毎週開催されるオークション",
+                feat_weekly_desc: "毎月70以上のオークションイベントがあり、毎週定期的に実施されています。",
+                feat_var_title: "多様な出品ユニット",
+                feat_var_desc: "JBAでは毎週、さまざまなブランド、モデル、タイプの数千台の車両がオークションにかけられます。",
+                news_title: "JBA情報 & 記事",
+                art_tag: "記事",
+                news_1_title: "2026年のBPKB手続き最新情報：知っておくべきこと",
+                news_1_desc: "2026年に入り、インドネシアの車両行政はデジタルトランスフォーメーションによりさらに簡素化されました...",
+                news_2_title: "2026年に売れる車はこれだ！誰が市場を制するか？",
+                news_2_desc: "現在のインドネシアの自動車産業は、非常に困難な時期にあります...",
+                app_dl_title: "オークションの最新情報をあなたの手の中に",
+                app_dl_subtitle: "今すぐJBAアプリをダウンロード",
+                foot_ho: "JBAインドネシア本社",
+                foot_addr: "Jalan Sosial No 4, 西ジャカルタ",
+                foot_service: "サービス",
+                foot_info: "情報",
+                foot_help: "ヘルプ",
+                link_about: "JBAについて",
+                link_contact: "お問い合わせ",
+                link_terms: "利用規約",
+                foot_copy: "&copy; 2026 PT JBA Indonesia. 無断複写・転載を禁じます。"
+            }
+        };
+
+        function changeLanguage(lang) {
+            // Validasi input
+            if (!translations[lang]) return;
+
+            // Simpan preferensi
+            localStorage.setItem('selectedLang', lang);
+
+            // Update semua elemen yang punya atribut data-i18n
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    // Cek apakah elemen input/textarea (gunakan placeholder)
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.tagName === 'OPTION') {
+                         el.innerText = translations[lang][key];
+                    } else {
+                        // Element biasa (div, span, p, a, h1-h6)
+                        el.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+
+            // Ubah selector agar sesuai dengan bahasa yang aktif
+            const selector = document.getElementById('languageSelector');
+            if(selector) selector.value = lang;
+        }
+
+        // --- SCRIPT INTERAKSI HALAMAN ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. LOGIC MOBILE NAVBAR (HAMBURGER)
+            // 1. Cek Bahasa Tersimpan
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            changeLanguage(savedLang);
+
+            // 2. Event Listener Selector Bahasa
+            const langSelector = document.getElementById('languageSelector');
+            if(langSelector) {
+                langSelector.addEventListener('change', (e) => {
+                    changeLanguage(e.target.value);
+                });
+            }
+
+            // 3. LOGIC MOBILE NAVBAR (HAMBURGER)
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const navMenu = document.getElementById('navMenu');
 
@@ -420,51 +608,40 @@
                 });
             }
 
-            // 2. Logic Tabs (Mobil / Motor)
+            // 4. Logic Tabs (Mobil / Motor)
             let selectedType = 'Mobil'; // Default
             const tabs = document.querySelectorAll('.tab-btn');
             
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // Hapus active dari semua
                     tabs.forEach(t => t.classList.remove('active'));
-                    // Tambah active ke yang diklik
                     tab.classList.add('active');
-                    // Simpan nilai tipe
                     selectedType = tab.getAttribute('data-type');
                 });
             });
 
-            // 3. Logic Tombol Cari
+            // 5. Logic Tombol Cari
             const searchForm = document.getElementById('searchForm');
-            searchForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Mencegah reload
-                
-                const loc = document.getElementById('homeLoc').value;
-                const brand = document.getElementById('homeBrand').value;
-                const model = document.getElementById('homeModel').value;
+            if(searchForm) {
+                searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault(); 
+                    
+                    const loc = document.getElementById('homeLoc').value;
+                    const brand = document.getElementById('homeBrand').value;
+                    const model = document.getElementById('homeModel').value;
 
-                // Redirect ke halaman lelang dengan parameter
-                const params = new URLSearchParams({
-                    type: selectedType,
-                    loc: loc,
-                    brand: brand,
-                    model: model
+                    const params = new URLSearchParams({
+                        type: selectedType,
+                        loc: loc,
+                        brand: brand,
+                        model: model
+                    });
+
+                    // Simulasi redirect
+                    // window.location.href = `lelang.html?${params.toString()}`;
+                    console.log('Redirecting to search:', params.toString());
+                    alert('Melakukan pencarian untuk: ' + selectedType + '\n(Simulasi Redirect)');
                 });
-
-                window.location.href = `lelang.html?${params.toString()}`;
-            });
-
-            // 4. Inisialisasi Bahasa Halaman Ini
-            const langSelector = document.getElementById('languageSelector');
-            const savedLang = localStorage.getItem('selectedLang') || 'id';
-            if(langSelector) {
-                langSelector.value = savedLang;
-                langSelector.addEventListener('change', (e) => changeLanguage(e.target.value));
-            }
-            // Panggil fungsi global dari script.js
-            if(typeof changeLanguage === 'function') {
-                changeLanguage(savedLang);
             }
         });
     </script>
