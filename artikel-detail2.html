@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baca Artikel - JBA Indonesia</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* CSS KHUSUS HALAMAN DETAIL ARTIKEL */
+        .article-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        
+        .article-header { margin-bottom: 30px; }
+        .article-meta { color: #666; font-size: 0.9rem; margin-bottom: 15px; display: flex; gap: 15px; align-items: center; }
+        .cat-badge { background: var(--accent-red); color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        
+        .article-title { font-size: 2rem; color: var(--primary-blue); line-height: 1.3; margin-bottom: 20px; }
+        
+        .article-image { width: 100%; height: auto; border-radius: 10px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .article-image img { width: 100%; display: block; }
+        
+        .article-body { font-size: 1.1rem; color: #333; line-height: 1.8; }
+        .article-body p { margin-bottom: 20px; }
+        .article-body h3 { color: var(--primary-blue); margin: 30px 0 15px; font-size: 1.4rem; }
+        .article-body ul { margin-bottom: 20px; padding-left: 20px; }
+        .article-body li { margin-bottom: 10px; }
+
+        /* Media Query Mobile */
+        .hamburger { display: none; font-size: 28px; color: var(--primary-blue); cursor: pointer; margin-left: 15px; }
+        
+        @media (max-width: 768px) {
+            .article-title { font-size: 1.5rem; }
+            
+            /* Navbar Logic Mobile */
+            .hamburger { display: block; }
+            .header-content { position: relative; }
+            
+            .nav-menu { 
+                display: none; position: absolute; top: 100%; left: 0; width: 100%; 
+                background: white; box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
+                border-top: 1px solid #eee; z-index: 9999; padding: 20px 0; 
+            }
+            .nav-menu.active { display: block; animation: slideDown 0.3s ease-out; }
+            
+            .nav-menu ul { flex-direction: column; gap: 0; }
+            .nav-menu li a { display: block; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; }
+            
+            @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
+            <div class="lang-container" style="display:flex; align-items:center; gap:15px;">
+                <select id="languageSelector" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.5); padding:4px 8px; border-radius:4px;">
+                    <option value="id">🇮🇩 Indonesia</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="jp">🇯🇵 日本語</option>
+                </select>
+                <a href="#" data-i18n="btn_download">Download</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo"><h1>JBA</h1></div>
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                    <li><a href="artikel.html" class="active" data-i18n="nav_blog">ARTIKEL</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; align-items: center;">
+                <div class="header-actions">
+                    <a href="artikel.html" class="btn-outline" data-i18n="btn_back">Kembali</a>
+                </div>
+                <div class="hamburger" id="hamburgerBtn">☰</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="article-container">
+        
+        <div style="margin-bottom:20px; color:#666; font-size:0.9rem;">
+            <a href="index.html" data-i18n="nav_home">Beranda</a> / 
+            <a href="artikel.html" data-i18n="nav_blog">Artikel</a> / 
+            <span id="bcTitle">...</span>
+        </div>
+
+        <article>
+            <header class="article-header">
+                <div class="article-meta">
+                    <span class="cat-badge" id="artCat">...</span>
+                    <span id="artDate">...</span>
+                </div>
+                <h1 class="article-title" id="artTitle">Loading...</h1>
+            </header>
+
+            <div class="article-image">
+                <img id="artImg" src="" alt="Article Image">
+            </div>
+
+            <div class="article-body" id="artBody">
+                <p>Memuat konten artikel...</p>
+            </div>
+        </article>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p style="text-align:center; color:#bbb;" data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
+        </div>
+    </footer>
+    
+    <div class="floating-container">
+        <a href="#" class="float-btn top-btn" id="scrollTopBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="float-btn wa-btn"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
+    </div>
+
+    <script>
+        // 1. DATABASE ARTIKEL LENGKAP
+        const articlesDB = {
+            1: {
+                img: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop",
+                cat: "TIPS",
+                date: "14 Jan 2026",
+                title: {
+                    id: "Tips Jitu Cek Mesin Mobil Bekas Bagi Pemula",
+                    en: "Essential Tips for Checking Used Car Engines for Beginners",
+                    jp: "初心者のための中古車エンジンチェックのヒント"
+                },
+                content: {
+                    id: `
+                        <p>Membeli mobil bekas di balai lelang bisa menjadi solusi hemat untuk mendapatkan kendaraan impian. Namun, risikonya juga besar jika Anda tidak teliti, terutama pada bagian paling vital: <strong>Mesin</strong>. Jangan sampai tertipu tampilan luar yang kinclong tapi mesin bobrok.</p>
+                        
+                        <p>Berikut adalah cara mudah mendeteksi kerusakan mesin mobil bekas yang bisa dilakukan oleh pemula:</p>
+
+                        <h3>1. Periksa Ruang Mesin (Kebocoran)</h3>
+                        <p>Buka kap mesin dan perhatikan dengan seksama. Mesin yang sehat harusnya kering. Perhatikan sela-sela blok mesin, selang, dan sambungan.</p>
+                        <ul>
+                            <li><strong>Waspada:</strong> Jika terlihat ada rembesan oli basah atau kerak oli yang tebal. Ini menandakan ada kebocoran pada seal atau packing mesin.</li>
+                        </ul>
+
+                        <h3>2. Cek Dipstick Oli</h3>
+                        <p>Tarik dipstick oli saat mesin dingin. Perhatikan warna dan teksturnya.</p>
+                        <ul>
+                            <li><strong>Normal:</strong> Warna coklat keemasan atau hitam (wajar untuk mobil bekas).</li>
+                            <li><strong>Bahaya:</strong> Jika warna oli seperti <em>kopi susu</em> (coklat muda keruh). Ini tanda air radiator bercampur dengan oli, indikasi kerusakan berat pada silinder head.</li>
+                        </ul>
+
+                        <h3>3. Dengarkan Suara Mesin (Cold Start)</h3>
+                        <p>Mintalah untuk menghidupkan mesin saat kondisi dingin. Dengarkan seksama di 3-5 detik pertama.</p>
+                        <ul>
+                            <li>Mesin sehat akan terdengar halus dan ritmis.</li>
+                            <li>Waspadai suara "tek-tek-tek" atau desis kasar yang tidak wajar.</li>
+                        </ul>
+
+                        <h3>4. Perhatikan Asap Knalpot</h3>
+                        <p>Saat mesin menyala, perhatikan asap yang keluar dari knalpot:</p>
+                        <ul>
+                            <li><strong>Asap Bening/Tipis:</strong> Normal.</li>
+                            <li><strong>Asap Putih Tebal:</strong> Indikasi oli ikut terbakar atau kebocoran seal klep/ring piston.</li>
+                            <li><strong>Asap Hitam:</strong> Pembakaran tidak sempurna (boros bensin).</li>
+                        </ul>
+
+                        <p>Di JBA, kami selalu menyertakan laporan inspeksi lengkap mengenai kondisi mesin (Grade A-E). Pastikan Anda membaca dokumen hasil inspeksi sebelum melakukan <em>bidding</em>!</p>
+                    `,
+                    en: `
+                        <p>Buying a used car at an auction is a great way to save money, but the engine condition is critical. Don't be fooled by a shiny exterior with a broken engine.</p>
+                        <h3>1. Check for Leaks</h3>
+                        <p>Open the hood. A healthy engine should be dry. Look closely at the engine block and hoses. Wet spots indicate leaks.</p>
+                        <h3>2. Check the Oil Dipstick</h3>
+                        <p>Pull the dipstick. If the oil looks like <strong>milky coffee</strong>, it means coolant has mixed with the oil—a sign of major engine failure.</p>
+                        <h3>3. Listen to the Sound</h3>
+                        <p>Start the engine. It should sound smooth. Beware of loud knocking or metal-clashing sounds.</p>
+                        <h3>4. Check Exhaust Smoke</h3>
+                        <p>Thick white smoke means burning oil. Black smoke means rich fuel mixture.</p>
+                    `,
+                    jp: `
+                        <p>オークションで中古車を購入するのは賢い選択ですが、エンジンの状態を確認することは非常に重要です。</p>
+                        <h3>1. オイル漏れの確認</h3>
+                        <p>ボンネットを開けてください。健康なエンジンは乾いています。</p>
+                        <h3>2. オイルレベルゲージの確認</h3>
+                        <p>オイルの色が<strong>カフェオレ色</strong>の場合、冷却水が混入しており、深刻なトラブルの兆候です。</p>
+                        <h3>3. エンジン音を聞く</h3>
+                        <p>エンジンを始動し、異音がないか確認してください。</p>
+                        <h3>4. 排気ガスの色</h3>
+                        <p>白煙はオイル上がり、黒煙は燃料過多を示します。</p>
+                    `
+                }
+            },
+            2: {
+                img: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=1200&auto=format&fit=crop",
+                cat: "BERITA",
+                date: "10 Jan 2026",
+                title: {
+                    id: "Regulasi Baru: Pengurusan BPKB Kini Full Online",
+                    en: "New Regulation: BPKB Processing Now Fully Online",
+                    jp: "新規制：BPKB手続きが完全にオンライン化"
+                },
+                content: {
+                    id: `
+                        <p><strong>Jakarta, 10 Januari 2026</strong> – Pemerintah Indonesia secara resmi menerapkan sistem digitalisasi penuh untuk pengurusan Buku Pemilik Kendaraan Bermotor (BPKB) mulai awal tahun ini. Langkah revolusioner ini diambil oleh Korlantas Polri bekerja sama dengan Kementerian Dalam Negeri untuk memangkas birokrasi yang berbelit dan meminimalisir praktik pungutan liar (pungli).</p>
+                        <h3>Transformasi ke BPKB Elektronik</h3>
+                        <p>Dirregident Korlantas Polri menyatakan bahwa perubahan ini bukan hanya soal administrasi, tetapi juga keamanan data. BPKB lama yang berbentuk buku fisik kini akan bertransformasi menjadi data digital yang terintegrasi dengan chip pada STNK elektronik.</p>
+                        <h3>Cara Mengurus BPKB Online</h3>
+                        <p>Masyarakat kini tidak perlu lagi mengantre panjang di kantor SAMSAT. Berikut adalah langkah-langkah mudah pengurusannya:</p>
+                        <ul>
+                            <li>Unduh aplikasi resmi <strong>SAMSAT Digital Nasional (SIGNAL)</strong>.</li>
+                            <li>Lakukan registrasi dan verifikasi identitas menggunakan e-KTP dan pindai wajah (Face Recognition).</li>
+                            <li>Pilih menu "Pengurusan BPKB" dan upload dokumen pendukung (Faktur, KTP, dll).</li>
+                            <li>Lakukan pembayaran PNBP secara cashless melalui transfer bank atau e-wallet.</li>
+                            <li>BPKB Digital akan terbit di aplikasi, dan versi fisik (jika diminta) akan dikirim ke alamat rumah.</li>
+                        </ul>
+                    `,
+                    en: `<p>The Indonesian government has officially implemented a full digitization system for processing the Motor Vehicle Ownership Book (BPKB) starting early this year.</p><h3>Electronic BPKB</h3><p>Physical books will transform into digital data.</p>`,
+                    jp: `<p>インドネシア政府は、今年初めから自動車所有者帳簿（BPKB）の手続きを完全にデジタル化するシステムを正式に導入しました。</p>`
+                }
+            },
+            3: {
+                img: "https://images.unsplash.com/photo-1621360841013-c768371e93cf?q=80&w=1200&auto=format&fit=crop",
+                cat: "EVENT",
+                date: "05 Jan 2026",
+                title: { id: "Lelang Akbar Awal Tahun", en: "Grand New Year Auction", jp: "新年グランドオークション" },
+                content: { id: "<p>JBA mengadakan lelang akbar dengan ribuan unit...</p>", en: "<p>JBA is holding a grand auction...</p>", jp: "<p>JBAはグランドオークションを開催します...</p>" }
+            },
+            4: {
+                img: "https://images.unsplash.com/photo-1580273916550-e323be2eb5fa?q=80&w=1200&auto=format&fit=crop",
+                cat: "INSIGHT",
+                date: "02 Jan 2026",
+                title: { id: "Prediksi Harga Mobil 2026", en: "Car Price Prediction 2026", jp: "2026年の自動車価格予測" },
+                content: { id: "<p>Harga mobil bekas diprediksi naik...</p>", en: "<p>Used car prices are predicted to rise...</p>", jp: "<p>中古車価格は上昇すると予測されています...</p>" }
+            },
+            5: {
+                img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1200&auto=format&fit=crop",
+                cat: "TIPS",
+                date: "28 Des 2025",
+                title: { id: "Cek Motor Lelangan", en: "Checking Auction Bikes", jp: "オークションバイクのチェック" },
+                content: { id: "<p>Cara cek kondisi motor...</p>", en: "<p>How to check bike condition...</p>", jp: "<p>バイクの状態を確認する方法...</p>" }
+            },
+            6: {
+                img: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=1200&auto=format&fit=crop",
+                cat: "INFO",
+                date: "20 Des 2025",
+                title: { id: "Update Aplikasi JBA", en: "JBA App Update", jp: "JBAアプリアップデート" },
+                content: { id: "<p>Fitur baru di aplikasi...</p>", en: "<p>New features in the app...</p>", jp: "<p>アプリの新機能...</p>" }
+            }
+        };
+
+        // 2. KAMUS BAHASA UI
+        const translations = {
+            id: { app_promo: "Unduh Aplikasi JBA", btn_download: "Unduh", nav_home: "BERANDA", nav_auction: "LELANG JBA", nav_guide: "TATA CARA", nav_loc: "LOKASI", nav_member: "MEMBER", nav_blog: "ARTIKEL", btn_login: "Masuk", btn_back: "Kembali", foot_copy: "© 2026 PT JBA Indonesia." },
+            en: { app_promo: "Download App", btn_download: "Download", nav_home: "HOME", nav_auction: "AUCTION", nav_guide: "GUIDE", nav_loc: "LOCATIONS", nav_member: "MEMBER", nav_blog: "ARTICLES", btn_login: "Login", btn_back: "Back", foot_copy: "© 2026 PT JBA Indonesia." },
+            jp: { app_promo: "アプリダウンロード", btn_download: "ダウンロード", nav_home: "ホーム", nav_auction: "オークション", nav_guide: "ガイド", nav_loc: "会場", nav_member: "会員", nav_blog: "記事", btn_login: "ログイン", btn_back: "戻る", foot_copy: "© 2026 PT JBA Indonesia." }
+        };
+
+        // 3. FUNGSI RENDER
+        function renderArticle(lang) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id') || 1; // Default ID 1 (Tips Mesin)
+            const data = articlesDB[id];
+
+            if(data) {
+                document.getElementById('artImg').src = data.img;
+                document.getElementById('artCat').innerText = data.cat;
+                document.getElementById('artDate').innerText = "📅 " + data.date;
+                
+                document.getElementById('artTitle').innerText = data.title[lang];
+                document.getElementById('bcTitle').innerText = data.title[lang];
+                document.getElementById('artBody').innerHTML = data.content[lang];
+            }
+        }
+
+        // 4. FUNGSI BAHASA
+        function changeLanguage(lang) {
+            localStorage.setItem('selectedLang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            renderArticle(lang);
+            
+            if(lang === 'jp') document.body.style.fontFamily = "'Noto Sans JP', sans-serif";
+            else document.body.style.fontFamily = "'Roboto', sans-serif";
+        }
+
+        // 5. INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelector = document.getElementById('languageSelector');
+            const savedLang = localStorage.getItem('selectedLang') || 'id';
+            
+            langSelector.value = savedLang;
+            changeLanguage(savedLang);
+
+            langSelector.addEventListener('change', (e) => {
+                changeLanguage(e.target.value);
+            });
+
+            // Hamburger Logic
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            if(hamburgerBtn && navMenu) {
+                hamburgerBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Scroll Top
+             const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) scrollTopBtn.classList.add('show'); else scrollTopBtn.classList.remove('show');
+            });
+            scrollTopBtn.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); });
+        });
+    </script>
+</body>
+</html>
