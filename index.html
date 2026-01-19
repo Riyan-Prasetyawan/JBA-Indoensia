@@ -4,24 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JBA Indonesia - Lelang Otomotif No.1</title>
-    <link rel="stylesheet" href="style.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Mengatur font default agar mendukung karakter Jepang dengan baik */
-        body {
-            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+        /* --- GLOBAL STYLES --- */
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Roboto', 'Noto Sans JP', sans-serif; 
+            color: #333;
+            scroll-behavior: smooth; /* Penting untuk efek scroll halus */
+        }
+        
+        a { text-decoration: none; }
+        ul { padding: 0; list-style: none; }
+
+        /* Container Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
 
-        /* CSS Tambahan untuk Dropdown Bahasa */
-        .lang-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        /* --- TOP BAR & HEADER --- */
+        .lang-container { display: flex; align-items: center; gap: 15px; }
         .lang-select {
             background-color: rgba(255, 255, 255, 0.2);
             color: #fff;
@@ -32,57 +42,146 @@
             cursor: pointer;
             outline: none;
         }
-        .lang-select option {
-            color: #333;
-        }
-        .lang-select:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* --- CSS KHUSUS NAVBAR MOBILE (HAMBURGER) --- */
+        .lang-select option { color: #333; }
+        
         .hamburger {
             display: none;
             font-size: 28px;
-            color: var(--primary-blue, #0056b3); /* Fallback color */
+            color: #003366;
             cursor: pointer;
             margin-left: 15px;
         }
 
-        /* Responsive Mobile Style */
+        /* --- HERO SECTION --- */
+        .hero {
+            background: #f4f4f4; /* Bisa diganti background image */
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+        }
+        .btn-primary {
+            background: #e60000;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* --- SEARCH SECTION --- */
+        .search-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .tabs { display: flex; margin-bottom: 20px; }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            color: #888;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #003366;
+            border-bottom: 3px solid #003366;
+        }
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .search-form select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .btn-search {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- FLOATING BUTTONS (WA & TOP) --- */
+        .floating-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+        }
+
+        .float-btn:hover { transform: scale(1.1); }
+
+        .btn-wa { background-color: #25D366; } /* Hijau WA */
+        
+        .btn-top {
+            background-color: #003366; /* Biru JBA */
+            width: 50px; 
+            height: 50px;
+            opacity: 0; /* Hidden default */
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .btn-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
             .hamburger { display: block; }
             .header-content { position: relative; }
             .nav-menu {
                 display: none;
                 position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
+                top: 100%; left: 0; width: 100%;
                 background-color: #ffffff;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
                 border-top: 1px solid #eee;
                 z-index: 9999;
                 padding: 20px 0;
             }
-            .nav-menu.active {
-                display: block;
-                animation: slideDown 0.3s ease-out;
-            }
-            .nav-menu ul {
-                flex-direction: column;
-                gap: 0;
-                padding: 0;
-                margin: 0;
-            }
-            .nav-menu ul li { width: 100%; text-align: center; list-style: none; }
+            .nav-menu.active { display: block; animation: slideDown 0.3s ease-out; }
+            .nav-menu ul { flex-direction: column; gap: 0; }
+            .nav-menu ul li { width: 100%; text-align: center; }
             .nav-menu ul li a {
-                display: block;
-                padding: 15px;
+                display: block; padding: 15px;
                 border-bottom: 1px solid #f0f0f0;
                 color: #333;
-                text-decoration: none;
             }
-            .nav-menu ul li a:hover { background-color: #f9f9f9; }
+            
+            /* Adjust Floating Button di Mobile */
+            .floating-container { bottom: 20px; right: 20px; }
+            .float-btn { width: 50px; height: 50px; }
+            .btn-top { width: 45px; height: 45px; }
 
             @keyframes slideDown {
                 from { opacity: 0; transform: translateY(-10px); }
@@ -94,8 +193,8 @@
 <body>
 
     <div class="top-bar" style="background-color: #003366; color: white; padding: 10px 0;">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 15px;">
-            <span data-i18n="app_promo">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <span data-i18n="app_promo" style="font-size: 0.9rem;">Unduh Aplikasi JBA - Lelang Otomotif No.1</span>
             
             <div class="lang-container">
                 <select id="languageSelector" class="lang-select">
@@ -103,176 +202,150 @@
                     <option value="en">🇬🇧 English</option>
                     <option value="jp">🇯🇵 日本語</option>
                 </select>
-
-                <a href="#" style="color: white; text-decoration: none;" data-i18n="btn_download">Download</a>
+                <a href="#" style="color: white; font-size: 0.9rem;" data-i18n="btn_download">Download</a>
             </div>
         </div>
     </div>
 
     <header class="main-header" style="background: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div class="container header-content" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 15px;">
+        <div class="container header-content" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="logo">
                 <h1 style="margin: 0; color: #003366; font-size: 24px;">JBA</h1>
             </div>
             
             <nav class="nav-menu" id="navMenu">
-                <ul style="display: flex; gap: 20px; list-style: none; margin: 0;">
-                    <li><a href="index.html" class="active" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_home">BERANDA</a></li>
-                    <li><a href="lelang.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_auction">LELANG JBA</a></li>
-                    <li><a href="tata-cara.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_guide">TATA CARA LELANG</a></li>
-                    <li><a href="lokasi.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_loc">LOKASI LELANG</a></li>
-                    <li><a href="membership.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
-                    <li><a href="artikel.html" style="text-decoration: none; color: #333; font-weight: 500;" data-i18n="nav_blog">ARTIKEL</a></li>
+                <ul style="display: flex; gap: 20px; margin: 0;">
+                    <li><a href="index.html" class="active" style="color: #333; font-weight: 500;" data-i18n="nav_home">BERANDA</a></li>
+                    <li><a href="lelang.html" style="color: #333; font-weight: 500;" data-i18n="nav_auction">LELANG JBA</a></li>
+                    <li><a href="tata-cara.html" style="color: #333; font-weight: 500;" data-i18n="nav_guide">TATA CARA LELANG</a></li>
+                    <li><a href="lokasi.html" style="color: #333; font-weight: 500;" data-i18n="nav_loc">LOKASI LELANG</a></li>
+                    <li><a href="membership.html" style="color: #333; font-weight: 500;" data-i18n="nav_member">PROGRAM PELANGGAN</a></li>
+                    <li><a href="artikel.html" style="color: #333; font-weight: 500;" data-i18n="nav_blog">ARTIKEL</a></li>
                 </ul>
             </nav>
 
             <div style="display: flex; align-items: center;">
                 <div class="header-actions">
-                    <a href="https://wa.me/6285546528201" class="btn-outline" style="border: 1px solid #003366; padding: 8px 15px; border-radius: 5px; text-decoration: none; color: #003366;" data-i18n="btn_contact">Kontak Kami</a>
+                    <a href="https://wa.me/6285546528201" class="btn-outline" style="border: 1px solid #003366; padding: 8px 15px; border-radius: 5px; color: #003366;" data-i18n="btn_contact">Kontak Kami</a>
                 </div>
-                <div class="hamburger" id="hamburgerBtn">
-                    ☰
-                </div>
+                <div class="hamburger" id="hamburgerBtn">☰</div>
             </div>
         </div>
     </header>
 
     <main>
-        <section class="hero" style="background: #f4f4f4; padding: 60px 0; text-align: center;">
-            <div class="hero-overlay"></div>
+        <section class="hero">
             <div class="container hero-content">
                 <h2 style="font-size: 2.5rem; color: #333; margin-bottom: 10px;" data-i18n="hero_title">Ban dan Scrap Juga Bisa Dilelang!</h2>
                 <p style="font-size: 1.2rem; color: #666; margin-bottom: 30px;" data-i18n="hero_subtitle">Mau Ikut? Ini Jadwalnya!</p>
-                <div class="hero-date" style="background: rgb(0, 0, 0); display: inline-block; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px;">
+                <div class="hero-date" style="background: white; display: inline-block; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px;">
                     <h3 data-i18n="hero_date_text">Sabtu, 17 Januari 2026</h3>
                     <p>13:00 - 17:00 WIB</p>
                 </div>
                 <br>
-                <a href="lelang.html" class="btn-primary" style="background: #e60000; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;" data-i18n="btn_cta">Ikuti Lelangnya</a>
+                <a href="lelang.html" class="btn-primary" data-i18n="btn_cta">Ikuti Lelangnya</a>
             </div>
         </section>
 
         <section class="search-section" style="margin-top: -30px; padding-bottom: 50px;">
-            <div class="container" style="max-width: 900px; margin: 0 auto;">
-                <div class="search-card" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <div class="container" style="max-width: 900px;">
+                <div class="search-card">
                     <h3 style="margin-top: 0;" data-i18n="search_title">Sedang Cari Kendaraan Apa?</h3>
-                    <div class="tabs" id="vehicleTabs" style="margin-bottom: 20px;">
-                        <button class="tab-btn active" style="padding: 10px 20px; margin-right: 5px; cursor: pointer;" data-type="Mobil" data-i18n="cat_car">Mobil</button>
-                        <button class="tab-btn" style="padding: 10px 20px; margin-right: 5px; cursor: pointer;" data-type="Motor" data-i18n="cat_bike">Motor</button>
-                        <button class="tab-btn" style="padding: 10px 20px; cursor: pointer;" data-type="Lainnya" data-i18n="cat_other">Lainnya</button>
+                    <div class="tabs" id="vehicleTabs">
+                        <button class="tab-btn active" data-type="Mobil" data-i18n="cat_car">Mobil</button>
+                        <button class="tab-btn" data-type="Motor" data-i18n="cat_bike">Motor</button>
+                        <button class="tab-btn" data-type="Lainnya" data-i18n="cat_other">Lainnya</button>
                     </div>
                     
-                    <form class="search-form" id="searchForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                        <select id="homeLoc" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <form class="search-form" id="searchForm">
+                        <select id="homeLoc">
                             <option value="" data-i18n="opt_loc">Pilih Lokasi</option>
                             <option value="Jakarta Tipar">Jakarta Tipar</option>
                             <option value="Bandung">Bandung</option>
                             <option value="Semarang">Semarang</option>
                             <option value="Pekanbaru">Pekanbaru</option>
                         </select>
-                        <select id="homeBrand" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        <select id="homeBrand">
                             <option value="" data-i18n="opt_brand">Pilih Merek</option>
-                            <option value="Toyota">Toyota</option>
-                            <option value="Honda">Honda</option>
-                            <option value="Daihatsu">Daihatsu</option>
-                        </select>
-                        <select id="homeModel" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            </select>
+                        <select id="homeModel">
                             <option value="" data-i18n="opt_model">Pilih Model</option>
-                            <option value="Avanza">Avanza</option>
-                            <option value="Brio">Brio</option>
-                            <option value="Xenia">Xenia</option>
-                        </select>
-                        <button type="submit" class="btn-search" style="background: #003366; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;" data-i18n="btn_search">CARI</button>
+                             </select>
+                        <button type="submit" class="btn-search" data-i18n="btn_search">CARI</button>
                     </form>
                 </div>
             </div>
         </section>
 
-        <section class="schedule-section" style="padding: 50px 0; background: #fff;">
-            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
+        <section class="schedule-section" style="padding: 50px 0;">
+            <div class="container">
                 <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <h2 data-i18n="sched_title">Jadwal Lelang Terdekat</h2>
-                    <a href="lelang.html" class="view-all" style="color: #003366; text-decoration: none; font-weight: bold;" data-i18n="view_all">Lihat Semua</a>
+                    <a href="lelang.html" class="view-all" style="color: #003366; font-weight: bold;" data-i18n="view_all">Lihat Semua</a>
                 </div>
 
                 <div class="auction-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px;">
                         <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
-                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
-                            <span class="lot-count">341 Lot</span>
+                            <span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
+                            <span>341 Lot</span>
                         </div>
                         <div class="card-body" style="padding: 15px;">
                             <h4>Jakarta Tipar</h4>
-                            <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info" style="margin-top: 10px; color: #555;">
-                                <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
-                            </div>
-                            <div class="time-info" style="color: #555;">
-                                <span class="icon">⏰</span> 13:00 WIB
-                            </div>
+                            <p data-i18n="cat_car" style="color: #666;">Mobil</p>
+                            <div style="margin-top: 10px; color: #555;">📅 15 <span data-i18n="month_jan">Jan</span> 2026</div>
+                            <div style="color: #555;">⏰ 13:00 WIB</div>
                         </div>
                         <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
-                            <a href="lelang.html" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Jakarta" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px;">
                         <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
-                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
-                            <span class="lot-count">177 Lot</span>
+                            <span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
+                            <span>177 Lot</span>
                         </div>
                         <div class="card-body" style="padding: 15px;">
                             <h4>Semarang</h4>
-                            <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info" style="margin-top: 10px; color: #555;">
-                                <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
-                            </div>
-                            <div class="time-info" style="color: #555;">
-                                <span class="icon">⏰</span> 13:00 WIB
-                            </div>
+                            <p data-i18n="cat_car" style="color: #666;">Mobil</p>
+                            <div style="margin-top: 10px; color: #555;">📅 15 <span data-i18n="month_jan">Jan</span> 2026</div>
+                            <div style="color: #555;">⏰ 13:00 WIB</div>
                         </div>
                         <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
-                            <a href="lelang.html" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Semarang" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px;">
                         <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
-                            <span class="badge-upcoming" style="background: orange; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">UPCOMING</span>
-                            <span class="lot-count">326 Lot</span>
+                            <span style="background: orange; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">UPCOMING</span>
+                            <span>326 Lot</span>
                         </div>
                         <div class="card-body" style="padding: 15px;">
                             <h4>Bandung</h4>
-                            <p class="category" data-i18n="cat_car">Mobil</p>
-                            <div class="date-info" style="margin-top: 10px; color: #555;">
-                                <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
-                            </div>
-                            <div class="time-info" style="color: #555;">
-                                <span class="icon">⏰</span> 13:00 WIB
-                            </div>
+                            <p data-i18n="cat_car" style="color: #666;">Mobil</p>
+                            <div style="margin-top: 10px; color: #555;">📅 15 <span data-i18n="month_jan">Jan</span> 2026</div>
+                            <div style="color: #555;">⏰ 13:00 WIB</div>
                         </div>
                         <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
-                            <a href="lelang.html" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Bandung" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
 
-                     <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                    <div class="auction-card" style="border: 1px solid #eee; border-radius: 8px;">
                         <div class="card-header" style="background: #f9f9f9; padding: 10px; display: flex; justify-content: space-between;">
-                            <span class="badge-live" style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
-                            <span class="lot-count">300 Lot</span>
+                            <span style="background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">LIVE</span>
+                            <span>300 Lot</span>
                         </div>
                         <div class="card-body" style="padding: 15px;">
                             <h4>Pekanbaru</h4>
-                            <p class="category" data-i18n="cat_bike">Motor</p>
-                            <div class="date-info" style="margin-top: 10px; color: #555;">
-                                <span class="icon">📅</span> 15 <span data-i18n="month_jan">Jan</span> 2026
-                            </div>
-                            <div class="time-info" style="color: #555;">
-                                <span class="icon">⏰</span> 11:00 WIB
-                            </div>
+                            <p data-i18n="cat_bike" style="color: #666;">Motor</p>
+                            <div style="margin-top: 10px; color: #555;">📅 15 <span data-i18n="month_jan">Jan</span> 2026</div>
+                            <div style="color: #555;">⏰ 11:00 WIB</div>
                         </div>
                         <div class="card-footer" style="padding: 15px; border-top: 1px solid #eee;">
-                            <a href="lelang.html" class="btn-block" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; text-decoration: none; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
+                            <a href="lelang.html?loc=Pekanbaru" style="display: block; text-align: center; background: #003366; color: white; padding: 8px; border-radius: 4px;" data-i18n="btn_view_list">Lihat Daftar Unit</a>
                         </div>
                     </div>
                 </div>
@@ -280,26 +353,26 @@
         </section>
 
         <section class="features-section" style="padding: 50px 0; background: #f8f9fa;">
-            <div class="container" style="max-width: 1200px; margin: 0 auto; text-align: center;">
+            <div class="container" style="text-align: center;">
                 <h2 style="margin-bottom: 40px;" data-i18n="why_title">Kenapa Memilih Lelang JBA</h2>
                 <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
                     <div class="feature-item">
-                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🛡️</div>
+                        <div style="font-size: 30px; margin-bottom: 15px;">🛡️</div>
                         <h3 data-i18n="feat_safe_title">Aman dan Transparan</h3>
-                        <p data-i18n="feat_safe_desc">Informasi lengkap mengenai unit kendaraan yang dilelang dapat diakses oleh siapa saja. Terdaftar resmi di bawah DJKN.</p>
+                        <p data-i18n="feat_safe_desc">Informasi lengkap unit yang dilelang dapat diakses siapa saja. Terdaftar resmi di bawah DJKN.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🌐</div>
+                        <div style="font-size: 30px; margin-bottom: 15px;">🌐</div>
                         <h3 data-i18n="feat_net_title">Jaringan Lelang Luas</h3>
                         <p data-i18n="feat_net_desc">Dengan 15 cabang dan 24 hub yang tersebar di berbagai lokasi strategis di seluruh Indonesia.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">📅</div>
+                        <div style="font-size: 30px; margin-bottom: 15px;">📅</div>
                         <h3 data-i18n="feat_weekly_title">Lelang Setiap Minggu</h3>
                         <p data-i18n="feat_weekly_desc">Terdapat lebih dari 70 event lelang setiap bulannya dan dilaksanakan rutin setiap minggu.</p>
                     </div>
                     <div class="feature-item">
-                        <div class="icon-circle" style="font-size: 30px; margin-bottom: 15px;">🚗</div>
+                        <div style="font-size: 30px; margin-bottom: 15px;">🚗</div>
                         <h3 data-i18n="feat_var_title">Unit Lelang Bervariasi</h3>
                         <p data-i18n="feat_var_desc">Setiap minggunya, JBA melelangkan ribuan unit kendaraan dari berbagai merek, model, dan tipe.</p>
                     </div>
@@ -308,24 +381,24 @@
         </section>
 
         <section class="news-section" style="padding: 50px 0;">
-            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
+            <div class="container">
                 <div class="section-header">
                     <h2 data-i18n="news_title">Info JBA & Artikel</h2>
                 </div>
                 <div class="news-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                     <article class="news-card" style="border: 1px solid #eee; border-radius: 8px;">
-                        <div class="news-image placeholder-img" style="background: #ddd; height: 180px;"></div>
+                        <div style="background: #ddd; height: 180px;"></div>
                         <div class="news-content" style="padding: 20px;">
-                            <span class="news-tag" style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
-                            <h3 style="margin: 10px 0; font-size: 1.1rem;" data-i18n="news_1_title">Cara Terbaru Urus BPKB di Tahun 2026 yang Wajib Anda Pahami</h3>
-                            <p style="color: #666; font-size: 0.9rem;" data-i18n="news_1_desc">Memasuki tahun 2026, urusan administrasi kendaraan di Indonesia semakin dipermudah melalui transformasi digital...</p>
+                            <span style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
+                            <h3 data-i18n="news_1_title">Cara Terbaru Urus BPKB di Tahun 2026 yang Wajib Anda Pahami</h3>
+                            <p style="color: #666; font-size: 0.9rem;" data-i18n="news_1_desc">Memasuki tahun 2026, urusan administrasi kendaraan semakin dipermudah melalui transformasi digital...</p>
                         </div>
                     </article>
                     <article class="news-card" style="border: 1px solid #eee; border-radius: 8px;">
-                        <div class="news-image placeholder-img" style="background: #ddd; height: 180px;"></div>
+                        <div style="background: #ddd; height: 180px;"></div>
                         <div class="news-content" style="padding: 20px;">
-                            <span class="news-tag" style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
-                            <h3 style="margin: 10px 0; font-size: 1.1rem;" data-i18n="news_2_title">Mobil Ini Diprediksi Laku Keras di 2026, Siapa yang Akan Menguasai?</h3>
+                            <span style="background: #eee; padding: 3px 8px; font-size: 0.8rem; border-radius: 3px;" data-i18n="art_tag">ARTIKEL</span>
+                            <h3 data-i18n="news_2_title">Mobil Ini Diprediksi Laku Keras di 2026, Siapa yang Akan Menguasai?</h3>
                             <p style="color: #666; font-size: 0.9rem;" data-i18n="news_2_desc">Industri mobil di Indonesia saat ini sedang berada di masa yang benar-benar menantang...</p>
                         </div>
                     </article>
@@ -334,64 +407,92 @@
         </section>
 
         <section class="app-download" style="background: #003366; color: white; padding: 60px 0;">
-            <div class="container app-content" style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 15px;">
-                <div class="app-text" style="max-width: 50%;">
+            <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="max-width: 50%;">
                     <h2 data-i18n="app_dl_title">Dapatkan informasi terbaru seputar lelang dalam genggaman Anda</h2>
                     <p data-i18n="app_dl_subtitle" style="margin: 20px 0;">Unduh Aplikasi JBA Sekarang</p>
-                    <div class="store-buttons" style="display: flex; gap: 10px;">
-                        <button class="btn-store" style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">Google Play</button>
-                        <button class="btn-store" style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">App Store</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">Google Play</button>
+                        <button style="background: black; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">App Store</button>
                     </div>
                 </div>
-                <div class="app-image">
-                    <div class="phone-mockup" style="font-size: 100px;">📱</div>
-                </div>
+                <div style="font-size: 100px;">📱</div>
             </div>
         </section>
     </main>
 
     <footer style="background: #222; color: #fff; padding: 60px 0 20px;">
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
-            <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
-                <div class="footer-col">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                <div>
                     <h3 data-i18n="foot_ho" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Kantor Pusat JBA Indonesia</h3>
                     <p data-i18n="foot_addr">Jalan Sosial No 4, Jakarta Barat</p>
                     <p><strong>CS:</strong> 1500-369</p>
-                    <p><strong>Email:</strong> cs@jba.co.id</p>
                 </div>
-                <div class="footer-col">
+                <div>
                     <h3 data-i18n="foot_service" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Layanan</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="lelang.html?type=Mobil" style="color: #aaa; text-decoration: none;" data-i18n="cat_car">Lelang Mobil</a></li>
-                        <li><a href="lelang.html?type=Motor" style="color: #aaa; text-decoration: none;" data-i18n="cat_bike">Lelang Motor</a></li>
-                        <li><a href="#" style="color: #aaa; text-decoration: none;">JBA Kredit</a></li>
+                    <ul>
+                        <li><a href="#" style="color: #aaa;" data-i18n="cat_car">Lelang Mobil</a></li>
+                        <li><a href="#" style="color: #aaa;" data-i18n="cat_bike">Lelang Motor</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div>
                     <h3 data-i18n="foot_info" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Informasi</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_about">Tentang JBA</a></li>
-                        <li><a href="lokasi.html" style="color: #aaa; text-decoration: none;" data-i18n="nav_loc">Lokasi Lelang</a></li>
-                        <li><a href="lelang.html" style="color: #aaa; text-decoration: none;" data-i18n="sched_title">Jadwal Lelang</a></li>
+                    <ul>
+                        <li><a href="#" style="color: #aaa;" data-i18n="link_about">Tentang JBA</a></li>
+                        <li><a href="lokasi.html" style="color: #aaa;" data-i18n="nav_loc">Lokasi Lelang</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div>
                     <h3 data-i18n="foot_help" style="border-bottom: 2px solid #e60000; padding-bottom: 10px; display: inline-block;">Bantuan</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="#" style="color: #aaa; text-decoration: none;">FAQ</a></li>
-                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_contact">Hubungi Kami</a></li>
-                        <li><a href="#" style="color: #aaa; text-decoration: none;" data-i18n="link_terms">Syarat dan Ketentuan</a></li>
+                    <ul>
+                        <li><a href="#" style="color: #aaa;">FAQ</a></li>
+                        <li><a href="#" style="color: #aaa;" data-i18n="link_contact">Hubungi Kami</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom" style="text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+            <div style="text-align: center; border-top: 1px solid #333; padding-top: 20px;">
                 <p data-i18n="foot_copy">&copy; 2026 PT JBA Indonesia. Hak Cipta Terpelihara.</p>
             </div>
         </div>
     </footer>
 
+    <div class="floating-container">
+        <button id="backToTopBtn" class="float-btn btn-top" title="Kembali ke Atas">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M0 0h24v24H0V0z" fill="none"/>
+                <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6l1.41 1.41z"/>
+            </svg>
+        </button>
+        <a href="https://wa.me/6285546528201" target="_blank" class="float-btn btn-wa" title="Hubungi via WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28px" height="28px">
+                <path d="M16.75 13.96c.25.13.36.23.36.4 0 .33-.89 1.94-1.32 1.94-.15 0-.44-.09-1.29-.44-2.58-1.07-4.25-3.69-4.38-3.87-.13-.18-1.05-1.4-1.05-2.67 0-1.27.66-1.89.89-2.15.22-.26.59-.33.79-.33.19 0 .39.01.56.02.18.01.42-.07.65.49.24.57.81 1.99.88 2.13.07.15.12.33.02.53-.1.21-.15.34-.3.51-.15.18-.32.39-.45.53-.14.15-.29.32-.13.59.17.27.73 1.2 1.57 1.95 1.08.96 1.99 1.26 2.27 1.4.29.15.46.12.63-.07.17-.19.74-.86.94-1.15.2-.29.4-.24.67-.13zM12.05 2C6.48 2 1.96 6.53 1.96 12.1c0 1.78.46 3.46 1.28 4.93L2 22l5.12-1.34c1.42.77 3.03 1.23 4.93 1.23 5.56 0 10.08-4.53 10.08-10.09S17.61 2 12.05 2z"/>
+            </svg>
+        </a>
+    </div>
+
     <script>
-        // --- LOGIKA MULTI-BAHASA (INDONESIA, INGGRIS, JEPANG) ---
+        // --- DATA KENDARAAN (SORTIR AKTIF) ---
+        const vehicleData = {
+            'Mobil': {
+                'Toyota': ['Avanza', 'Innova', 'Fortuner', 'Calya', 'Agya'],
+                'Honda': ['Brio', 'Jazz', 'HR-V', 'CR-V', 'Mobilio'],
+                'Daihatsu': ['Xenia', 'Sigra', 'Ayla', 'Terios', 'Gran Max'],
+                'Mitsubishi': ['Xpander', 'Pajero Sport'],
+                'Suzuki': ['Ertiga', 'XL7']
+            },
+            'Motor': {
+                'Yamaha': ['NMAX', 'Aerox', 'Mio', 'XMAX', 'Fazzio'],
+                'Honda': ['Beat', 'Vario', 'PCX', 'Scoopy', 'CBR'],
+                'Suzuki': ['Satria', 'GSX', 'Address'],
+                'Kawasaki': ['Ninja', 'KLX']
+            },
+            'Lainnya': {
+                'Lainnya': ['Forklift', 'Excavator', 'Truk']
+            }
+        };
+
+        // --- KAMUS BAHASA (ID, EN, JP) ---
         const translations = {
             id: {
                 app_promo: "Unduh Aplikasi JBA - Lelang Otomotif No.1",
@@ -554,43 +655,106 @@
             }
         };
 
-        function changeLanguage(lang) {
-            // Validasi input
-            if (!translations[lang]) return;
+        let currentType = 'Mobil'; // Default
 
-            // Simpan preferensi
+        // FUNGSI GANTI BAHASA
+        function changeLanguage(lang) {
+            if (!translations[lang]) return;
             localStorage.setItem('selectedLang', lang);
 
-            // Update semua elemen yang punya atribut data-i18n
             const elements = document.querySelectorAll('[data-i18n]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
-                    // Cek apakah elemen input/textarea (gunakan placeholder)
                     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                         el.placeholder = translations[lang][key];
                     } else if (el.tagName === 'OPTION') {
                          el.innerText = translations[lang][key];
                     } else {
-                        // Element biasa (div, span, p, a, h1-h6)
                         el.innerHTML = translations[lang][key];
                     }
                 }
             });
 
-            // Ubah selector agar sesuai dengan bahasa yang aktif
+            // Update dropdowns agar placeholder "Pilih Merek" sesuai bahasa
+            updateBrandDropdown();
+
             const selector = document.getElementById('languageSelector');
             if(selector) selector.value = lang;
         }
 
-        // --- SCRIPT INTERAKSI HALAMAN ---
+        // FUNGSI UPDATE DROPDOWN
+        function updateBrandDropdown() {
+            const brandSelect = document.getElementById('homeBrand');
+            const modelSelect = document.getElementById('homeModel');
+            const lang = localStorage.getItem('selectedLang') || 'id';
+
+            // Reset
+            brandSelect.innerHTML = '';
+            modelSelect.innerHTML = '';
+
+            // Default Option Merek
+            const defaultBrandOpt = document.createElement('option');
+            defaultBrandOpt.value = "";
+            defaultBrandOpt.innerText = translations[lang]['opt_brand'] || "Pilih Merek";
+            defaultBrandOpt.setAttribute('data-i18n', 'opt_brand');
+            brandSelect.appendChild(defaultBrandOpt);
+
+            // Default Option Model
+            const defaultModelOpt = document.createElement('option');
+            defaultModelOpt.value = "";
+            defaultModelOpt.innerText = translations[lang]['opt_model'] || "Pilih Model";
+            defaultModelOpt.setAttribute('data-i18n', 'opt_model');
+            modelSelect.appendChild(defaultModelOpt);
+
+            // Isi Merek
+            if (vehicleData[currentType]) {
+                const brands = Object.keys(vehicleData[currentType]);
+                brands.forEach(brand => {
+                    const opt = document.createElement('option');
+                    opt.value = brand;
+                    opt.innerText = brand;
+                    brandSelect.appendChild(opt);
+                });
+            }
+        }
+
+        function updateModelDropdown() {
+            const brandSelect = document.getElementById('homeBrand');
+            const modelSelect = document.getElementById('homeModel');
+            const selectedBrand = brandSelect.value;
+            const lang = localStorage.getItem('selectedLang') || 'id';
+
+            // Reset Model
+            modelSelect.innerHTML = '';
+            
+            // Default Option Model
+            const defaultModelOpt = document.createElement('option');
+            defaultModelOpt.value = "";
+            defaultModelOpt.innerText = translations[lang]['opt_model'] || "Pilih Model";
+            defaultModelOpt.setAttribute('data-i18n', 'opt_model');
+            modelSelect.appendChild(defaultModelOpt);
+
+            // Isi Model jika Merek dipilih
+            if (selectedBrand && vehicleData[currentType][selectedBrand]) {
+                const models = vehicleData[currentType][selectedBrand];
+                models.forEach(model => {
+                    const opt = document.createElement('option');
+                    opt.value = model;
+                    opt.innerText = model;
+                    modelSelect.appendChild(opt);
+                });
+            }
+        }
+
+        // --- DOM CONTENT LOADED (MAIN LOGIC) ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Cek Bahasa Tersimpan
+            // 1. Cek Bahasa
             const savedLang = localStorage.getItem('selectedLang') || 'id';
             changeLanguage(savedLang);
 
-            // 2. Event Listener Selector Bahasa
+            // 2. Listener Bahasa
             const langSelector = document.getElementById('languageSelector');
             if(langSelector) {
                 langSelector.addEventListener('change', (e) => {
@@ -598,29 +762,33 @@
                 });
             }
 
-            // 3. LOGIC MOBILE NAVBAR (HAMBURGER)
+            // 3. Mobile Hamburger
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const navMenu = document.getElementById('navMenu');
-
             if(hamburgerBtn && navMenu) {
                 hamburgerBtn.addEventListener('click', () => {
                     navMenu.classList.toggle('active');
                 });
             }
 
-            // 4. Logic Tabs (Mobil / Motor)
-            let selectedType = 'Mobil'; // Default
+            // 4. Tabs & Sortir
             const tabs = document.querySelectorAll('.tab-btn');
-            
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    selectedType = tab.getAttribute('data-type');
+                    currentType = tab.getAttribute('data-type');
+                    updateBrandDropdown();
                 });
             });
 
-            // 5. Logic Tombol Cari
+            // 5. Change Brand Listener
+            const brandSelect = document.getElementById('homeBrand');
+            if(brandSelect) {
+                brandSelect.addEventListener('change', updateModelDropdown);
+            }
+
+            // 6. Search Submit
             const searchForm = document.getElementById('searchForm');
             if(searchForm) {
                 searchForm.addEventListener('submit', (e) => {
@@ -631,16 +799,30 @@
                     const model = document.getElementById('homeModel').value;
 
                     const params = new URLSearchParams({
-                        type: selectedType,
+                        type: currentType,
                         loc: loc,
                         brand: brand,
                         model: model
                     });
+                    window.location.href = `lelang.html?${params.toString()}`;
+                });
+            }
 
-                    // Simulasi redirect
-                    // window.location.href = `lelang.html?${params.toString()}`;
-                    console.log('Redirecting to search:', params.toString());
-                    alert('Melakukan pencarian untuk: ' + selectedType + '\n(Simulasi Redirect)');
+            // 7. FLOATING BACK TO TOP LOGIC
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.classList.add('show');
+                    } else {
+                        backToTopBtn.classList.remove('show');
+                    }
+                });
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 });
             }
         });
